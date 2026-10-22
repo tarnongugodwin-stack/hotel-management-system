@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservation Management | GrandStay</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#173b57;--secondary:#247ba0;--bg:#f3f6fa;--text:#263445;--muted:#758397;--green:#16865c;--red:#d94b4b}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:235px;background:var(--primary);color:white;padding:24px 14px;flex-shrink:0}
+.logo{font-size:21px;font-weight:bold;margin:0 8px 8px}
+.logo span{color:#69d2c1}
+.tagline{color:#bdcbd8;font-size:12px;margin:0 8px 28px}
+.nav-title{font-size:11px;color:#a8bac9;margin:22px 10px 10px;text-transform:uppercase}
+.nav-link{display:block;color:#e1eaf1;text-decoration:none;padding:12px 10px;margin-bottom:5px;border-radius:7px;font-size:13px}
+.nav-link:hover,.nav-link.active{background:var(--secondary);color:white}
+.main{flex:1;min-width:0;padding:25px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px}
+.topbar h1{font-size:25px}
+.topbar p{font-size:13px;color:var(--muted);margin-top:7px}
+.admin{background:white;padding:12px;border-radius:8px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:25px}
+.stat{background:white;padding:20px;border-radius:10px}
+.stat p{font-size:12px;color:var(--muted);margin-bottom:12px}
+.stat h2{font-size:26px}
+.panel{background:white;padding:22px;border-radius:10px;margin-bottom:22px}
+.panel h2{font-size:18px;margin-bottom:20px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:8px}
+.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #dce3eb;border-radius:7px;background:white;font-size:14px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid #b8dced;border-color:var(--secondary)}
+.field textarea{resize:vertical;min-height:45px}
+.form-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{border:none;border-radius:7px;padding:11px 15px;font-size:12px;cursor:pointer;background:var(--secondary);color:white}
+.btn-light{background:#e9f2fa;color:var(--primary)}
+.btn-edit{background:#e5f0ff;color:#245b9b;padding:8px 10px}
+.btn-delete{background:#fde9e9;color:#bb3030;padding:8px 10px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
+.toolbar h2{margin:0}
+.search{width:300px;max-width:100%;padding:12px;border:1px solid #dce3eb;border-radius:7px;font-size:13px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th,td{padding:13px 10px;border-bottom:1px solid #edf0f4;text-align:left;font-size:12px}
+th{background:#f8fafc;color:var(--muted)}
+.badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:11px;white-space:nowrap}
+.confirmed{background:#e2f6eb;color:#16865c}
+.pending{background:#fff1d9;color:#9c650e}
+.checked-in{background:#e4efff;color:#2863a5}
+.checked-out{background:#edf0f4;color:#526174}
+.cancelled{background:#fde9e9;color:#bb3030}
+.actions{display:flex;gap:6px}
+.empty{text-align:center;padding:25px;color:var(--muted)}
+.cost-box{background:#e9f2fa;border-radius:8px;padding:15px;margin-top:17px}
+.cost-box p{font-size:13px;margin-bottom:7px}
+.cost-box strong{font-size:23px;color:var(--primary)}
+.message{display:none;padding:12px;border-radius:7px;margin-bottom:15px;font-size:13px}
+.message.error{display:block;background:#fde9e9;color:#a12626}
+.message.success{display:block;background:#e2f6eb;color:#126b49}
+.footer{text-align:center;padding:18px;font-size:12px;color:var(--muted)}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.layout{display:block}.sidebar{width:100%;padding:16px 10px}.tagline{margin-bottom:15px}.nav-title{margin-top:14px}.nav-link{display:inline-block;padding:9px;margin:2px;font-size:11px}.main{padding:16px 11px}.topbar h1{font-size:21px}.admin{font-size:10px}.stats{gap:10px}.stat{padding:15px}.stat h2{font-size:22px}.form-grid{grid-template-columns:1fr}.panel{padding:15px}.toolbar{align-items:stretch;flex-direction:column}.search{width:100%}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="logo">GRAND<span>STAY</span></div>
+<div class="tagline">Hotel Management System</div>
+<div class="nav-title">Main Menu</div>
+<a href="index.html" class="nav-link">🏠 Dashboard</a>
+<a href="rooms.html" class="nav-link">🛏️ Room Management</a>
+<a href="guests.html" class="nav-link">👥 Guest Management</a>
+<a href="reservations.html" class="nav-link active">📅 Reservations</a>
+<a href="payments.html" class="nav-link">💳 Payments</a>
+<div class="nav-title">Hotel Operations</div>
+<a href="staff.html" class="nav-link">🧑‍💼 Staff Management</a>
+<a href="housekeeping.html" class="nav-link">🧹 Housekeeping</a>
+<a href="reports.html" class="nav-link">📊 Reports</a>
+<div class="nav-title">System</div>
+<a href="settings.html" class="nav-link">⚙️ Settings</a>
+<a href="login.html" class="nav-link">🔐 Admin Login</a>
+</aside>
+
+<main class="main">
+<header class="topbar">
+<div><h1>Reservation Management</h1><p>Manage bookings, stays, and room availability.</p></div>
+<div class="admin">👤 Administrator</div>
+</header>
+
+<section class="stats">
+<div class="stat"><p>Total Reservations</p><h2 id="totalBookings">0</h2></div>
+<div class="stat"><p>Confirmed</p><h2 id="confirmedBookings">0</h2></div>
+<div class="stat"><p>Currently Checked In</p><h2 id="checkedInBookings">0</h2></div>
+<div class="stat"><p>Cancelled</p><h2 id="cancelledBookings">0</h2></div>
+</section>
+
+<section class="panel">
+<h2 id="formTitle">Create New Reservation</h2>
+<div id="formMessage" class="message" role="alert"></div>
+
+<form id="bookingForm">
+<div class="form-grid">
+<div class="field">
+<label for="guestId">Registered Guest *</label>
+<select id="guestId" required>
+<option value="">Select a guest</option>
+</select>
+</div>
+
+<div class="field">
+<label for="roomId">Hotel Room *</label>
+<select id="roomId" required>
+<option value="">Select a room</option>
+</select>
+</div>
+
+<div class="field">
+<label for="checkIn">Check-in Date *</label>
+<input type="date" id="checkIn" required>
+</div>
+
+<div class="field">
+<label for="checkOut">Check-out Date *</label>
+<input type="date" id="checkOut" required>
+</div>
+
+<div class="field">
+<label for="numberGuests">Number of Guests *</label>
+<input type="number" id="numberGuests" min="1" max="20" value="1" required>
+</div>
+
+<div class="field">
+<label for="bookingStatus">Reservation Status</label>
+<select id="bookingStatus">
+<option value="Confirmed">Confirmed</option>
+<option value="Pending">Pending</option>
+<option value="Checked-in">Checked-in</option>
+<option value="Checked-out">Checked-out</option>
+<option value="Cancelled">Cancelled</option>
+</select>
+</div>
+
+<div class="field" style="grid-column:1/-1">
+<label for="bookingNotes">Special Requests / Notes</label>
+<textarea id="bookingNotes" maxlength="500" placeholder="Optional guest requests"></textarea>
+</div>
+</div>
+
+<div class="cost-box">
+<p>Length of Stay: <strong id="stayLength">0 nights</strong></p>
+<p>Room Price Per Night: <strong id="nightlyRate">₦0</strong></p>
+<p>Total Booking Cost: <strong id="totalCost">₦0</strong></p>
+</div>
+
+<div class="form-actions">
+<button type="submit" class="btn" id="saveButton">Save Reservation</button>
+<button type="button" class="btn btn-light" id="cancelEdit" hidden>Cancel Edit</button>
+</div>
+</form>
+</section>
+
+<section class="panel">
+<div class="toolbar">
+<h2>Reservation Register</h2>
+<input id="bookingSearch" class="search" type="search" placeholder="Search guest, room, or booking ID">
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Booking ID</th>
+<th>Guest</th>
+<th>Room</th>
+<th>Check-in</th>
+<th>Check-out</th>
+<th>Nights</th>
+<th>Total Cost</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="bookingTable"></tbody>
+</table>
+</div>
+<p class="empty" id="emptyMessage">No reservations recorded yet.</p>
+</section>
+
+<footer class="footer">GrandStay Hotel Management System &copy; 2026</footer>
+<script>
+const BOOKING_KEY = "hotelReservations";
+const GUEST_KEY = "hotelGuests";
+const ROOM_KEY = "hotelRooms";
+
+let bookings = loadData(BOOKING_KEY);
+let guests = loadData(GUEST_KEY);
+let rooms = loadData(ROOM_KEY);
+let editingId = null;
+
+function loadData(key) {
+    try {
+        const data = JSON.parse(localStorage.getItem(key) || "[]");
+        return Array.isArray(data) ? data : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveBookings() {
+    localStorage.setItem(BOOKING_KEY, JSON.stringify(bookings));
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+    }[char]));
+}
+
+function money(value) {
+    return "₦" + Number(value || 0).toLocaleString("en-NG");
+}
+
+function dateNumber(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+    if (!match) return NaN;
+
+    const year = Number(match[1]);
+    const month = Number(match[2]) - 1;
+    const day = Number(match[3]);
+    const date = new Date(Date.UTC(year, month, day));
+
+    if (date.getUTCFullYear() !== year ||
+        date.getUTCMonth() !== month ||
+        date.getUTCDate() !== day) return NaN;
+
+    return date.getTime();
+}
+
+function nightsBetween(start, end) {
+    const a = dateNumber(start);
+    const b = dateNumber(end);
+
+    if (!Number.isFinite(a) || !Number.isFinite(b) || b <= a) {
+        return 0;
+    }
+
+    return Math.round((b - a) / 86400000);
+}
+
+function guestName(id) {
+    const guest = guests.find(item => item.id === id);
+    return guest ? guest.fullName : "Guest record unavailable";
+}
+
+function roomRecord(id) {
+    return rooms.find(item => item.id === id);
+}
+
+function roomNumber(id) {
+    const room = roomRecord(id);
+    return room ? room.roomNumber : "Room unavailable";
+}
+
+function selectedGuestOptions(selected = "") {
+    const options = guests.map(guest =>
+        `<option value="${escapeHTML(guest.id)}"
+        ${guest.id === selected ? "selected" : ""}>
+        ${escapeHTML(guest.fullName)} (${escapeHTML(guest.guestId || "")})
+        </option>`
+    ).join("");
+
+    document.getElementById("guestId").innerHTML =
+        '<option value="">Select a guest</option>' + options;
+}
+
+function selectedRoomOptions(selected = "") {
+    const select = document.getElementById("roomId");
+    const checkIn = document.getElementById("checkIn").value;
+    const checkOut = document.getElementById("checkOut").value;
+
+    const options = rooms.filter(room => {
+        if (room.status === "Maintenance") return false;
+
+        if (editingId && room.id === selected) return true;
+
+        return !bookings.some(booking =>
+            booking.roomId === room.id &&
+            booking.id !== editingId &&
+            ["Confirmed", "Checked-in"].includes(booking.status) &&
+            overlaps(checkIn, checkOut, booking.checkIn, booking.checkOut)
+        );
+    }).map(room =>
+        `<option value="${escapeHTML(room.id)}"
+        ${room.id === selected ? "selected" : ""}>
+        Room ${escapeHTML(room.roomNumber)} — ${escapeHTML(room.type)}
+        (${money(room.price)}/night)
+        </option>`
+    ).join("");
+
+    select.innerHTML = '<option value="">Select a room</option>' + options;
+}
+
+function overlaps(startA, endA, startB, endB) {
+    const a = dateNumber(startA);
+    const b = dateNumber(endA);
+    const c = dateNumber(startB);
+    const d = dateNumber(endB);
+
+    if (![a, b, c, d].every(Number.isFinite)) return false;
+
+    return a < d && c < b;
+}
+
+function showMessage(message, type = "error") {
+    const box = document.getElementById("formMessage");
+    box.textContent = message;
+    box.className = "message " + type;
+}
+
+function clearMessage() {
+    const box = document.getElementById("formMessage");
+    box.textContent = "";
+    box.className = "message";
+}
+
+function updateCost() {
+    const room = roomRecord(document.getElementById("roomId").value);
+    const start = document.getElementById("checkIn").value;
+    const end = document.getElementById("checkOut").value;
+    const nights = nightsBetween(start, end);
+    const rate = room ? Number(room.price) || 0 : 0;
+
+    document.getElementById("stayLength").textContent =
+        nights + (nights === 1 ? " night" : " nights");
+
+    document.getElementById("nightlyRate").textContent = money(rate);
+    document.getElementById("totalCost").textContent =
+        money(nights * rate);
+}
+
+function renderBookings() {
+    const query = document.getElementById("bookingSearch")
+        .value.trim().toLowerCase();
+
+    const filtered = bookings.filter(booking => {
+        const text = [
+            booking.bookingId,
+            guestName(booking.guestId),
+            roomNumber(booking.roomId),
+            booking.status
+        ].join(" ").toLowerCase();
+
+        return text.includes(query);
+    });
+
+    document.getElementById("bookingTable").innerHTML =
+        filtered.map(booking => {
+            const statusClass = ({
+                "Confirmed": "confirmed",
+                "Pending": "pending",
+                "Checked-in": "checked-in",
+                "Checked-out": "checked-out",
+                "Cancelled": "cancelled"
+            })[booking.status] || "pending";
+
+            return `<tr>
+                <td>${escapeHTML(booking.bookingId)}</td>
+                <td>${escapeHTML(guestName(booking.guestId))}</td>
+                <td>${escapeHTML(roomNumber(booking.roomId))}</td>
+                <td>${escapeHTML(booking.checkIn)}</td>
+                <td>${escapeHTML(booking.checkOut)}</td>
+                <td>${nightsBetween(booking.checkIn, booking.checkOut)}</td>
+                <td>${money(booking.totalCost)}</td>
+                <td><span class="badge ${statusClass}">
+                    ${escapeHTML(booking.status)}
+                </span></td>
+                <td><div class="actions">
+                    <button class="btn btn-edit"
+                    data-edit="${escapeHTML(booking.id)}">Edit</button>
+                    <button class="btn btn-delete"
+                    data-delete="${escapeHTML(booking.id)}">Cancel</button>
+                </div></td>
+            </tr>`;
+        }).join("");
+
+    document.getElementById("emptyMessage").hidden = filtered.length > 0;
+    document.getElementById("emptyMessage").textContent =
+        bookings.length === 0
+        ? "No reservations recorded yet. Create one above."
+        : "No reservations match your search.";
+
+    document.getElementById("totalBookings").textContent = bookings.length;
+    document.getElementById("confirmedBookings").textContent =
+        bookings.filter(b => b.status === "Confirmed").length;
+    document.getElementById("checkedInBookings").textContent =
+        bookings.filter(b => b.status === "Checked-in").length;
+    document.getElementById("cancelledBookings").textContent =
+        bookings.filter(b => b.status === "Cancelled").length;
+}
+
+document.getElementById("bookingForm").addEventListener("submit", event => {
+    event.preventDefault();
+    clearMessage();
+
+    guests = loadData(GUEST_KEY);
+    rooms = loadData(ROOM_KEY);
+
+    const guestId = document.getElementById("guestId").value;
+    const roomId = document.getElementById("roomId").value;
+    const checkIn = document.getElementById("checkIn").value;
+    const checkOut = document.getElementById("checkOut").value;
+    const numberGuests = Number(document.getElementById("numberGuests").value);
+    const status = document.getElementById("bookingStatus").value;
+    const notes = document.getElementById("bookingNotes").value.trim();
+
+    const guest = guests.find(item => item.id === guestId);
+    const room = roomRecord(roomId);
+    const nights = nightsBetween(checkIn, checkOut);
+
+    if (!guest || !room) {
+        showMessage("Please select a registered guest and a valid room.");
+        return;
+    }
+
+    if (room.status === "Maintenance") {
+        showMessage("This room is under maintenance and cannot be booked.");
+        return;
+    }
+
+    if (!nights || !Number.isFinite(dateNumber(checkIn)) ||
+        !Number.isFinite(dateNumber(checkOut))) {
+        showMessage("Check-out must be a valid date after check-in.");
+        return;
+    }
+
+    if (!Number.isInteger(numberGuests) || numberGuests < 1 ||
+        numberGuests > Number(room.capacity || 1)) {
+        showMessage("Guest count exceeds the room's capacity.");
+        return;
+    }
+
+    if (["Checked-in", "Checked-out"].includes(status) &&
+        dateNumber(checkIn) > dateNumber(new Date().toISOString().slice(0, 10))) {
+        showMessage("A future reservation cannot be checked in or checked out yet.");
+        return;
+    }
+
+    if (status === "Checked-out" &&
+        dateNumber(checkOut) > dateNumber(new Date().toISOString().slice(0, 10))) {
+        showMessage("Check-out date is still in the future.");
+        return;
+    }
+
+    const occupiesRoom = ["Confirmed", "Checked-in"].includes(status);
+
+    if (occupiesRoom && bookings.some(booking =>
+        booking.roomId === roomId &&
+        booking.id !== editingId &&
+        ["Confirmed", "Checked-in"].includes(booking.status) &&
+        overlaps(checkIn, checkOut, booking.checkIn, booking.checkOut)
+    )) {
+        showMessage("This room already has a booking that overlaps these dates.");
+        return;
+    }
+
+    const totalCost = nights * Number(room.price);
+
+    if (!Number.isFinite(totalCost) || totalCost <= 0) {
+        showMessage("The room price is invalid. Check Room Management.");
+        return;
+    }
+
+    const record = {
+        guestId,
+        roomId,
+        checkIn,
+        checkOut,
+        numberGuests,
+        status,
+        notes,
+        totalCost
+    };
+
+    if (editingId) {
+        const index = bookings.findIndex(item => item.id === editingId);
+        if (index === -1) {
+            showMessage("Reservation not found. Please refresh the page.");
+            return;
+        }
+
+        bookings[index] = {...bookings[index], ...record};
+        showMessage("Reservation updated successfully.", "success");
+    } else {
+        record.id = Date.now().toString() +
+            Math.random().toString(36).slice(2, 8);
+
+        record.bookingId = "BK-" + Date.now().toString().slice(-8);
+        record.createdAt = new Date().toISOString();
+        bookings.push(record);
+        showMessage("Reservation created successfully: " + record.bookingId, "success");
+    }
+
+    saveBookings();
+    resetForm();
+    renderBookings();
+});
+
+document.getElementById("bookingTable").addEventListener("click", event => {
+    const edit = event.target.closest("[data-edit]");
+    const cancel = event.target.closest("[data-delete]");
+
+    if (edit) editBooking(edit.dataset.edit);
+    if (cancel) cancelBooking(cancel.dataset.delete);
+});
+
+function editBooking(id) {
+    const booking = bookings.find(item => item.id === id);
+    if (!booking) return;
+
+    editingId = id;
+    guests = loadData(GUEST_KEY);
+    rooms = loadData(ROOM_KEY);
+
+    selectedGuestOptions(booking.guestId);
+    selectedRoomOptions(booking.roomId);
+
+    document.getElementById("checkIn").value = booking.checkIn;
+    document.getElementById("checkOut").value = booking.checkOut;
+    document.getElementById("numberGuests").value = booking.numberGuests;
+    document.getElementById("bookingStatus").value = booking.status;
+    document.getElementById("bookingNotes").value = booking.notes || "";
+    document.getElementById("formTitle").textContent = "Edit Reservation";
+    document.getElementById("saveButton").textContent = "Update Reservation";
+    document.getElementById("cancelEdit").hidden = false;
+
+    updateCost();
+    clearMessage();
+    document.getElementById("bookingForm").scrollIntoView({behavior:"smooth"});
+}
+
+function cancelBooking(id) {
+    const booking = bookings.find(item => item.id === id);
+    if (!booking) return;
+
+    if (booking.status === "Checked-out") {
+        alert("A completed reservation cannot be cancelled.");
+        return;
+    }
+
+    if (!confirm("Cancel reservation " + booking.bookingId + "?")) return;
+
+    booking.status = "Cancelled";
+    saveBookings();
+    renderBookings();
+
+    if (editingId === id) resetForm();
+
+    alert("Reservation cancelled.");
+}
+
+function resetForm() {
+    document.getElementById("bookingForm").reset();
+    editingId = null;
+    document.getElementById("formTitle").textContent = "Create New Reservation";
+    document.getElementById("saveButton").textContent = "Save Reservation";
+    document.getElementById("cancelEdit").hidden = true;
+
+    selectedGuestOptions();
+    selectedRoomOptions();
+    updateCost();
+}
+
+document.getElementById("cancelEdit").addEventListener("click", () => {
+    clearMessage();
+    resetForm();
+});
+
+document.getElementById("bookingSearch").addEventListener("input", renderBookings);
+
+document.getElementById("roomId").addEventListener("change", updateCost);
+
+document.getElementById("checkIn").addEventListener("change", () => {
+    selectedRoomOptions(document.getElementById("roomId").value);
+    updateCost();
+});
+
+document.getElementById("checkOut").addEventListener("change", () => {
+    selectedRoomOptions(document.getElementById("roomId").value);
+    updateCost();
+});
+
+function initialize() {
+    selectedGuestOptions();
+    selectedRoomOptions();
+
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById("checkIn").min = today;
+    document.getElementById("checkOut").min = today;
+
+    renderBookings();
+    updateCost();
+}
+
+initialize();
+</script>
+</main>
+</div>
+</body>
+  </html>
