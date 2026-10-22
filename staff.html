@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Management | GrandStay Hotel</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#243047}
+header{background:#152b49;color:white;padding:20px}
+header h1{margin:0 0 6px}
+header p{margin:0;color:#d8e3f2}
+nav{background:#203c60;padding:12px;display:flex;gap:15px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-weight:bold;font-size:14px}
+.container{max-width:1200px;margin:20px auto;padding:0 15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:15px;margin-bottom:20px}
+.card,.panel{background:white;border-radius:10px;padding:18px;box-shadow:0 2px 8px #0000000d}
+.card h3{font-size:13px;color:#667085;margin:0 0 10px}
+.card strong{font-size:25px;color:#17375e}
+.panel{margin-bottom:20px}
+h2{margin-top:0;font-size:20px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+label{display:block;font-weight:bold;font-size:13px;margin-bottom:6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ccd3dc;border-radius:6px;font-size:14px;background:white}
+textarea{resize:vertical;min-height:70px}
+button{border:0;padding:10px 14px;border-radius:6px;cursor:pointer;font-weight:bold;margin:3px}
+.primary{background:#1d5ca8;color:white}
+.success{background:#16845b;color:white}
+.danger{background:#c83e4d;color:white}
+.secondary{background:#e7edf5;color:#243047}
+.small{font-size:12px;padding:7px 9px}
+.actions{margin-top:15px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #e7ebf0;font-size:13px}
+th{background:#f0f4f8}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:bold;background:#e8eef7}
+.active{background:#d9f5e5;color:#146c43}
+.inactive{background:#fce2e4;color:#a61b29}
+.notice{padding:12px;background:#eaf3ff;border-radius:7px;margin-bottom:15px;font-size:13px}
+.hidden{display:none!important}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.muted{color:#697586;font-size:13px}
+@media(max-width:600px){header h1{font-size:23px}.panel{padding:13px}button{margin:2px}}
+</style>
+</head>
+<body>
+<header>
+<h1>GrandStay Hotel</h1>
+<p>Staff and Salary Management</p>
+</header>
+
+<nav>
+<a href="index.html">Dashboard</a>
+<a href="rooms.html">Rooms</a>
+<a href="guests.html">Guests</a>
+<a href="reservations.html">Reservations</a>
+<a href="payments.html">Payments</a>
+<a href="staff.html">Staff Management</a>
+</nav>
+
+<main class="container">
+<div class="notice">
+Register hotel employees, record their monthly salaries, and track salary payments and outstanding balances.
+</div>
+
+<div class="cards">
+<div class="card">
+<h3>Total Staff</h3>
+<strong id="totalStaff">0</strong>
+</div>
+<div class="card">
+<h3>Active Staff</h3>
+<strong id="activeStaff">0</strong>
+</div>
+<div class="card">
+<h3>Monthly Salary Budget</h3>
+<strong id="salaryBudget">₦0.00</strong>
+</div>
+<div class="card">
+<h3>Outstanding Salaries</h3>
+<strong id="salaryOutstanding">₦0.00</strong>
+</div>
+</div>
+
+<section class="panel" id="staffFormPanel">
+<h2 id="staffFormTitle">Register New Staff</h2>
+<form id="staffForm">
+<input type="hidden" id="staffRecordId">
+
+<div class="form-grid">
+<div>
+<label for="fullName">Full Name *</label>
+<input id="fullName" required maxlength="100">
+</div>
+<div>
+<label for="phone">Phone Number *</label>
+<input id="phone" type="tel" required maxlength="25">
+</div>
+<div>
+<label for="email">Email Address</label>
+<input id="email" type="email" maxlength="120">
+</div>
+<div>
+<label for="department">Department *</label>
+<select id="department" required>
+<option value="">Select Department</option>
+<option>Management</option>
+<option>Reception</option>
+<option>Housekeeping</option>
+<option>Food and Beverage</option>
+<option>Kitchen</option>
+<option>Security</option>
+<option>Maintenance</option>
+<option>Accounts</option>
+<option>Human Resources</option>
+<option>Marketing</option>
+<option>Other</option>
+</select>
+</div>
+<div>
+<label for="position">Job Position *</label>
+<input id="position" required maxlength="80" placeholder="e.g. Receptionist">
+</div>
+<div>
+<label for="employmentDate">Employment Date *</label>
+<input id="employmentDate" type="date" required>
+</div>
+<div>
+<label for="monthlySalary">Monthly Salary (₦) *</label>
+<input id="monthlySalary" type="number" min="0" step="0.01" required>
+</div>
+<div>
+<label for="staffStatus">Employment Status *</label>
+<select id="staffStatus" required>
+<option value="Active">Active</option>
+<option value="Inactive">Inactive</option>
+</select>
+</div>
+</div>
+
+<div class="actions">
+<button class="primary" type="submit" id="saveStaffButton">Register Staff</button>
+<button class="secondary" type="button" id="cancelEditButton">Clear Form</button>
+</div>
+</form>
+</section>
+
+<section class="panel">
+<div class="section-title">
+<h2>Staff Records</h2>
+<input id="staffSearch" placeholder="Search name, staff ID, department..." style="max-width:330px">
+</div>
+<p class="muted">Select Edit to update an employee's information.</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Staff ID</th>
+<th>Full Name</th>
+<th>Department</th>
+<th>Position</th>
+<th>Monthly Salary</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="staffTableBody"></tbody>
+</table>
+</div>
+</section>
+
+<section class="panel">
+<h2>Record Salary Payment</h2>
+<div class="notice">
+Record payments made to registered staff. Payments are stored in this browser and are not actual bank transactions.
+</div>
+
+<form id="salaryForm">
+<div class="form-grid">
+<div>
+<label for="salaryStaff">Select Staff Member *</label>
+<select id="salaryStaff" required>
+<option value="">Select Staff</option>
+</select>
+</div>
+<div>
+<label for="salaryMonth">Salary Month *</label>
+<input id="salaryMonth" type="month" required>
+</div>
+<div>
+<label for="paymentAmount">Payment Amount (₦) *</label>
+<input id="paymentAmount" type="number" min="0.01" step="0.01" required>
+</div>
+<div>
+<label for="paymentDate">Payment Date *</label>
+<input id="paymentDate" type="date" required>
+</div>
+<div>
+<label for="paymentMethod">Payment Method *</label>
+<select id="paymentMethod" required>
+<option value="Bank Transfer">Bank Transfer</option>
+<option value="Cash">Cash</option>
+<option value="Cheque">Cheque</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div>
+<label for="salaryReference">Payment Reference</label>
+<input id="salaryReference" maxlength="80" placeholder="Optional transaction reference">
+</div>
+</div>
+<div class="actions">
+<button type="submit" class="success">Save Salary Payment</button>
+<button type="button" class="secondary" id="clearSalaryForm">Clear Payment Form</button>
+</div>
+</form>
+  </section>
+  <section class="panel">
+<div class="section-title">
+<h2>Salary Payment History</h2>
+<input id="salarySearch" placeholder="Search staff or salary month..." style="max-width:300px">
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Payment Ref.</th>
+<th>Staff Member</th>
+<th>Salary Month</th>
+<th>Amount Paid</th>
+<th>Date Paid</th>
+<th>Method</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="salaryTableBody"></tbody>
+</table>
+</div>
+</section>
+
+<section class="panel">
+<h2>Salary Balances by Staff</h2>
+<p class="muted">Balances are calculated from recorded payments for each salary month. Active staff are included in the monthly salary budget.</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Staff ID</th>
+<th>Name</th>
+<th>Department</th>
+<th>Monthly Salary</th>
+<th>Paid This Month</th>
+<th>Outstanding This Month</th>
+</tr>
+</thead>
+<tbody id="balanceTableBody"></tbody>
+</table>
+</div>
+</section>
+</main>
+
+<script>
+const STAFF_KEY = "hotelStaff";
+const SALARY_KEY = "hotelSalaryPayments";
+
+let staff = readData(STAFF_KEY);
+let salaryPayments = readData(SALARY_KEY);
+
+function readData(key){
+  try{
+    const data = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(data) ? data : [];
+  }catch(error){
+    return [];
+  }
+}
+
+function saveData(){
+  localStorage.setItem(STAFF_KEY, JSON.stringify(staff));
+  localStorage.setItem(SALARY_KEY, JSON.stringify(salaryPayments));
+}
+
+function money(value){
+  return "₦" + Number(value || 0).toLocaleString("en-NG",{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,function(char){
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char];
+  });
+}
+
+function makeId(prefix){
+  return prefix + "-" + Date.now().toString().slice(-8)
+    + "-" + Math.random().toString(36).slice(2,6).toUpperCase();
+}
+
+function currentMonth(){
+  const now = new Date();
+  return now.getFullYear() + "-" +
+    String(now.getMonth()+1).padStart(2,"0");
+}
+
+function paymentsForStaffMonth(staffId,month){
+  return salaryPayments
+    .filter(p => p.staffId === staffId && p.month === month)
+    .reduce((sum,p) => sum + Number(p.amount || 0),0);
+}
+
+function renderAll(){
+  saveData();
+  renderStats();
+  renderStaff();
+  renderStaffOptions();
+  renderSalaryHistory();
+  renderBalances();
+}
+
+function renderStats(){
+  const active = staff.filter(s => s.status === "Active");
+  const budget = active.reduce((sum,s) =>
+    sum + Number(s.monthlySalary || 0),0);
+
+  const month = currentMonth();
+  const outstanding = active.reduce((sum,s) => {
+    const paid = paymentsForStaffMonth(s.id,month);
+    return sum + Math.max(0,Number(s.monthlySalary || 0)-paid);
+  },0);
+
+  document.getElementById("totalStaff").textContent = staff.length;
+  document.getElementById("activeStaff").textContent = active.length;
+  document.getElementById("salaryBudget").textContent = money(budget);
+  document.getElementById("salaryOutstanding").textContent = money(outstanding);
+}
+
+function renderStaff(){
+  const query = document.getElementById("staffSearch").value.toLowerCase();
+  const rows = staff.filter(s =>
+    [s.staffId,s.fullName,s.department,s.position,s.phone,s.email]
+      .some(v => String(v || "").toLowerCase().includes(query))
+  );
+
+  const body = document.getElementById("staffTableBody");
+
+  if(!rows.length){
+    body.innerHTML = '<tr><td colspan="7">No staff records found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = rows.map(s => `
+    <tr>
+      <td>${escapeHTML(s.staffId)}</td>
+      <td>${escapeHTML(s.fullName)}</td>
+      <td>${escapeHTML(s.department)}</td>
+      <td>${escapeHTML(s.position)}</td>
+      <td>${money(s.monthlySalary)}</td>
+      <td><span class="badge ${s.status==="Active"?"active":"inactive"}">${escapeHTML(s.status)}</span></td>
+      <td>
+        <button class="primary small" onclick="editStaff('${s.id}')">Edit</button>
+        <button class="danger small" onclick="deleteStaff('${s.id}')">Delete</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function renderStaffOptions(){
+  const select = document.getElementById("salaryStaff");
+  const previous = select.value;
+
+  select.innerHTML = '<option value="">Select Staff</option>' +
+    staff.filter(s => s.status === "Active").map(s =>
+      `<option value="${escapeHTML(s.id)}">${escapeHTML(s.staffId)} - ${escapeHTML(s.fullName)}</option>`
+    ).join("");
+
+  if(staff.some(s => s.id === previous && s.status === "Active")){
+    select.value = previous;
+  }
+}
+
+document.getElementById("staffForm").addEventListener("submit",function(event){
+  event.preventDefault();
+
+  const recordId = document.getElementById("staffRecordId").value;
+  const existing = staff.find(s => s.id === recordId);
+
+  const record = {
+    id: recordId || makeId("STF"),
+    staffId: existing ? existing.staffId : makeId("GS"),
+    fullName: document.getElementById("fullName").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    department: document.getElementById("department").value,
+    position: document.getElementById("position").value.trim(),
+    employmentDate: document.getElementById("employmentDate").value,
+    monthlySalary: Number(document.getElementById("monthlySalary").value),
+    status: document.getElementById("staffStatus").value,
+    createdAt: existing ? existing.createdAt : new Date().toISOString()
+  };
+
+  if(!record.fullName || !record.phone || !record.department ||
+     !record.position || !record.employmentDate ||
+     record.monthlySalary < 0){
+    alert("Please complete all required staff fields.");
+    return;
+  }
+
+  if(existing){
+    staff = staff.map(s => s.id === recordId ? record : s);
+  }else{
+    staff.push(record);
+  }
+
+  saveData();
+  this.reset();
+  document.getElementById("staffRecordId").value = "";
+  document.getElementById("staffFormTitle").textContent = "Register New Staff";
+  document.getElementById("saveStaffButton").textContent = "Register Staff";
+  renderAll();
+  alert(existing ? "Staff record updated." : "Staff registered successfully.");
+});
+
+function editStaff(id){
+  const s = staff.find(item => item.id === id);
+  if(!s) return;
+
+  document.getElementById("staffRecordId").value = s.id;
+  document.getElementById("fullName").value = s.fullName;
+  document.getElementById("phone").value = s.phone;
+  document.getElementById("email").value = s.email || "";
+  document.getElementById("department").value = s.department;
+  document.getElementById("position").value = s.position;
+  document.getElementById("employmentDate").value = s.employmentDate;
+  document.getElementById("monthlySalary").value = s.monthlySalary;
+  document.getElementById("staffStatus").value = s.status;
+
+  document.getElementById("staffFormTitle").textContent = "Edit Staff Record";
+  document.getElementById("saveStaffButton").textContent = "Update Staff";
+  document.getElementById("staffFormPanel").scrollIntoView({behavior:"smooth"});
+}
+
+function deleteStaff(id){
+  const s = staff.find(item => item.id === id);
+  if(!s) return;
+
+  const hasPayments = salaryPayments.some(p => p.staffId === id);
+  if(hasPayments){
+    alert("This staff member has salary payment records. Change the employment status to Inactive instead of deleting the record.");
+    return;
+  }
+
+  if(confirm("Delete staff member " + s.fullName + "?")){
+    staff = staff.filter(item => item.id !== id);
+    renderAll();
+  }
+}
+
+document.getElementById("cancelEditButton").addEventListener("click",function(){
+  document.getElementById("staffForm").reset();
+  document.getElementById("staffRecordId").value = "";
+  document.getElementById("staffFormTitle").textContent = "Register New Staff";
+  document.getElementById("saveStaffButton").textContent = "Register Staff";
+});
+
+document.getElementById("salaryForm").addEventListener("submit",function(event){
+  event.preventDefault();
+
+  const staffId = document.getElementById("salaryStaff").value;
+  const month = document.getElementById("salaryMonth").value;
+  const amount = Number(document.getElementById("paymentAmount").value);
+  const date = document.getElementById("paymentDate").value;
+  const person = staff.find(s => s.id === staffId);
+
+  if(!person || !month || !date || amount <= 0){
+    alert("Please enter valid salary payment details.");
+    return;
+  }
+
+  const alreadyPaid = paymentsForStaffMonth(staffId,month);
+  const balance = Number(person.monthlySalary) - alreadyPaid;
+
+  if(balance <= 0){
+    alert("This staff member's salary for the selected month is already fully paid.");
+    return;
+  }
+
+  if(amount > balance){
+    alert("Payment exceeds the outstanding salary balance of " + money(balance) + ".");
+    return;
+  }
+
+  salaryPayments.push({
+    id: makeId("PAY"),
+    reference: makeId("SAL"),
+    staffId: staffId,
+    month: month,
+    amount: amount,
+    date: date,
+    method: document.getElementById("paymentMethod").value,
+    transactionRef: document.getElementById("salaryReference").value.trim(),
+    createdAt: new Date().toISOString()
+  });
+
+  renderAll();
+  this.reset();
+  document.getElementById("salaryMonth").value = currentMonth();
+  document.getElementById("paymentDate").value = new Date().toISOString().slice(0,10);
+  alert("Salary payment recorded successfully.");
+});
+
+document.getElementById("clearSalaryForm").addEventListener("click",function(){
+  document.getElementById("salaryForm").reset();
+  document.getElementById("salaryMonth").value = currentMonth();
+  document.getElementById("paymentDate").value = new Date().toISOString().slice(0,10);
+});
+
+function renderSalaryHistory(){
+  const query = document.getElementById("salarySearch").value.toLowerCase();
+
+  const rows = salaryPayments.filter(p => {
+    const person = staff.find(s => s.id === p.staffId);
+    return [
+      p.reference,p.month,p.method,p.transactionRef,
+      person ? person.fullName : "",
+      person ? person.staffId : ""
+    ].some(v => String(v || "").toLowerCase().includes(query));
+  }).slice().reverse();
+
+  const body = document.getElementById("salaryTableBody");
+
+  if(!rows.length){
+    body.innerHTML = '<tr><td colspan="7">No salary payments found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = rows.map(p => {
+    const person = staff.find(s => s.id === p.staffId);
+    return `
+      <tr>
+        <td>${escapeHTML(p.reference)}</td>
+        <td>${escapeHTML(person ? person.fullName : "Staff record unavailable")}</td>
+        <td>${escapeHTML(p.month)}</td>
+        <td>${money(p.amount)}</td>
+        <td>${escapeHTML(p.date)}</td>
+        <td>${escapeHTML(p.method)}</td>
+        <td><button class="danger small" onclick="deleteSalaryPayment('${p.id}')">Delete</button></td>
+      </tr>`;
+  }).join("");
+}
+
+function deleteSalaryPayment(id){
+  const payment = salaryPayments.find(p => p.id === id);
+  if(!payment) return;
+
+  if(confirm("Delete this salary payment record? The outstanding salary balance will increase.")){
+    salaryPayments = salaryPayments.filter(p => p.id !== id);
+    renderAll();
+  }
+}
+
+function renderBalances(){
+  const month = currentMonth();
+  const body = document.getElementById("balanceTableBody");
+
+  if(!staff.length){
+    body.innerHTML = '<tr><td colspan="6">Register staff to see salary balances.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = staff.map(s => {
+    const paid = paymentsForStaffMonth(s.id,month);
+    const balance = Math.max(0,Number(s.monthlySalary)-paid);
+
+    return `
+      <tr>
+        <td>${escapeHTML(s.staffId)}</td>
+        <td>${escapeHTML(s.fullName)}</td>
+        <td>${escapeHTML(s.department)}</td>
+        <td>${money(s.monthlySalary)}</td>
+        <td>${money(paid)}</td>
+        <td>${money(balance)}</td>
+      </tr>`;
+  }).join("");
+}
+
+document.getElementById("staffSearch").addEventListener("input",renderStaff);
+document.getElementById("salarySearch").addEventListener("input",renderSalaryHistory);
+
+document.getElementById("salaryMonth").value = currentMonth();
+document.getElementById("paymentDate").value = new Date().toISOString().slice(0,10);
+renderAll();
+</script>
+</body>
+  </html>
