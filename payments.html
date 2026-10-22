@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Management | GrandStay Hotel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#173b57;--secondary:#247ba0;--bg:#f3f6fa;--text:#263445;--muted:#758397;--green:#16865c;--red:#d94b4b}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:235px;background:var(--primary);color:white;padding:24px 14px;flex-shrink:0}
+.logo{font-size:21px;font-weight:bold;margin:0 8px 8px}
+.logo span{color:#69d2c1}
+.tagline{color:#bdcbd8;font-size:12px;margin:0 8px 28px}
+.nav-title{font-size:11px;color:#a8bac9;margin:22px 10px 10px;text-transform:uppercase}
+.nav-link{display:block;color:#e1eaf1;text-decoration:none;padding:12px 10px;margin-bottom:5px;border-radius:7px;font-size:13px}
+.nav-link:hover,.nav-link.active{background:var(--secondary);color:white}
+.main{flex:1;min-width:0;padding:25px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px}
+.topbar h1{font-size:25px}
+.topbar p{font-size:13px;color:var(--muted);margin-top:7px}
+.admin{background:white;padding:12px;border-radius:8px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:25px}
+.stat{background:white;padding:20px;border-radius:10px}
+.stat p{font-size:12px;color:var(--muted);margin-bottom:12px}
+.stat h2{font-size:23px;overflow-wrap:anywhere}
+.panel{background:white;padding:22px;border-radius:10px;margin-bottom:22px}
+.panel h2{font-size:18px;margin-bottom:20px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:8px}
+.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #dce3eb;border-radius:7px;background:white;font-size:14px}
+.field input:focus,.field select:focus{outline:2px solid #b8dced;border-color:var(--secondary)}
+.form-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{border:none;border-radius:7px;padding:11px 15px;font-size:12px;cursor:pointer;background:var(--secondary);color:white}
+.btn-light{background:#e9f2fa;color:var(--primary)}
+.btn-edit{background:#e5f0ff;color:#245b9b;padding:8px 10px}
+.btn-delete{background:#fde9e9;color:#bb3030;padding:8px 10px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
+.toolbar h2{margin:0}
+.search{width:300px;max-width:100%;padding:12px;border:1px solid #dce3eb;border-radius:7px;font-size:13px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{padding:13px 10px;border-bottom:1px solid #edf0f4;text-align:left;font-size:12px}
+th{background:#f8fafc;color:var(--muted)}
+.badge{display:inline-block;padding:6px 9px;border-radius:20px;font-size:11px;white-space:nowrap}
+.paid{background:#e2f6eb;color:#16865c}
+.partial{background:#fff1d9;color:#9c650e}
+.unpaid{background:#fde9e9;color:#bb3030}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.empty{text-align:center;padding:25px;color:var(--muted)}
+.summary{background:#e9f2fa;border-radius:8px;padding:16px;margin-top:18px}
+.summary p{font-size:13px;margin-bottom:8px}
+.summary strong{color:var(--primary)}
+.message{display:none;padding:12px;border-radius:7px;margin-bottom:15px;font-size:13px}
+.message.error{display:block;background:#fde9e9;color:#a12626}
+.message.success{display:block;background:#e2f6eb;color:#126b49}
+.footer{text-align:center;padding:18px;font-size:12px;color:var(--muted)}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.layout{display:block}.sidebar{width:100%;padding:16px 10px}.tagline{margin-bottom:15px}.nav-title{margin-top:14px}.nav-link{display:inline-block;padding:9px;margin:2px;font-size:11px}.main{padding:16px 11px}.topbar h1{font-size:21px}.admin{font-size:10px}.stats{gap:10px}.stat{padding:15px}.stat h2{font-size:19px}.form-grid{grid-template-columns:1fr}.panel{padding:15px}.toolbar{align-items:stretch;flex-direction:column}.search{width:100%}}
+@media print{
+.sidebar,.topbar,.stats,.payment-form,.toolbar,.actions,.footer,.no-print{display:none!important}
+body{background:white}
+.layout{display:block}
+.main{padding:0}
+.panel{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+.table-wrap{overflow:visible}
+table{min-width:0}
+th,td{font-size:10px;padding:7px 4px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="logo">GRAND<span>STAY</span></div>
+<div class="tagline">Hotel Management System</div>
+<div class="nav-title">Main Menu</div>
+<a href="index.html" class="nav-link">🏠 Dashboard</a>
+<a href="rooms.html" class="nav-link">🛏️ Room Management</a>
+<a href="guests.html" class="nav-link">👥 Guest Management</a>
+<a href="reservations.html" class="nav-link">📅 Reservations</a>
+<a href="payments.html" class="nav-link active">💳 Payments</a>
+<div class="nav-title">Hotel Operations</div>
+<a href="staff.html" class="nav-link">🧑‍💼 Staff Management</a>
+<a href="housekeeping.html" class="nav-link">🧹 Housekeeping</a>
+<a href="reports.html" class="nav-link">📊 Reports</a>
+<div class="nav-title">System</div>
+<a href="settings.html" class="nav-link">⚙️ Settings</a>
+<a href="login.html" class="nav-link">🔐 Admin Login</a>
+</aside>
+
+<main class="main">
+<header class="topbar">
+<div><h1>Payment Management</h1><p>Record payments, deposits, and outstanding balances.</p></div>
+<div class="admin">👤 Administrator</div>
+</header>
+
+<section class="stats">
+<div class="stat"><p>Total Reservations</p><h2 id="reservationCount">0</h2></div>
+<div class="stat"><p>Total Collections</p><h2 id="totalCollections">₦0</h2></div>
+<div class="stat"><p>Outstanding Balance</p><h2 id="totalOutstanding">₦0</h2></div>
+<div class="stat"><p>Fully Paid Bookings</p><h2 id="fullyPaidCount">0</h2></div>
+</section>
+
+<section class="panel payment-form">
+<h2 id="formTitle">Record a Payment</h2>
+<div id="formMessage" class="message" role="alert"></div>
+
+<form id="paymentForm">
+<div class="form-grid">
+<div class="field">
+<label for="bookingId">Reservation *</label>
+<select id="bookingId" required>
+<option value="">Select reservation</option>
+</select>
+</div>
+
+<div class="field">
+<label for="bookingTotal">Total Booking Cost</label>
+<input id="bookingTotal" readonly value="₦0">
+</div>
+
+<div class="field">
+<label for="previousPaid">Previously Paid</label>
+<input id="previousPaid" readonly value="₦0">
+</div>
+
+<div class="field">
+<label for="paymentAmount">Amount Received (₦) *</label>
+<input id="paymentAmount" type="number" min="0.01" step="0.01" required placeholder="Enter amount">
+</div>
+
+<div class="field">
+<label for="paymentMethod">Payment Method *</label>
+<select id="paymentMethod" required>
+<option value="Cash">Cash</option>
+<option value="Bank Transfer">Bank Transfer</option>
+<option value="Card">Card</option>
+</select>
+</div>
+
+<div class="field">
+<label for="paymentDate">Payment Date *</label>
+<input id="paymentDate" type="date" required>
+</div>
+
+<div class="field">
+<label for="transactionRef">Transaction Reference</label>
+<input id="transactionRef" maxlength="100" placeholder="Optional bank/reference number">
+</div>
+
+<div class="field">
+<label for="paymentNotes">Payment Notes</label>
+<input id="paymentNotes" maxlength="300" placeholder="Optional notes">
+</div>
+</div>
+
+<div class="summary">
+<p>Current Payment: <strong id="currentAmount">₦0</strong></p>
+<p>Balance After This Payment: <strong id="balanceAfter">₦0</strong></p>
+<p>Payment Status: <strong id="paymentStatusPreview">Unpaid</strong></p>
+</div>
+
+<div class="form-actions">
+<button type="submit" class="btn" id="saveButton">Save Payment</button>
+<button type="button" class="btn btn-light" id="cancelEdit" hidden>Cancel Edit</button>
+</div>
+</form>
+</section>
+
+<section class="panel">
+<div class="toolbar">
+<h2>Payment Records</h2>
+<input type="search" id="paymentSearch" class="search" placeholder="Search reference, guest, or booking">
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Guest</th>
+<th>Reservation</th>
+<th>Date</th>
+<th>Method</th>
+<th>Amount</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="paymentTable"></tbody>
+</table>
+</div>
+<p class="empty" id="emptyMessage">No payments recorded yet.</p>
+</section>
+
+<section class="panel">
+<h2>Booking Payment Summary</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Reservation</th>
+<th>Guest</th>
+<th>Booking Cost</th>
+<th>Amount Paid</th>
+<th>Balance</th>
+<th>Status</th>
+<th>Receipt</th>
+</tr>
+</thead>
+<tbody id="summaryTable"></tbody>
+</table>
+</div>
+<p class="empty" id="summaryEmpty">No reservations available.</p>
+</section>
+
+<footer class="footer">GrandStay Hotel Management System &copy; 2026</footer>
+<script>
+const PAYMENT_KEY = "hotelPayments";
+const RESERVATION_KEY = "hotelReservations";
+const GUEST_KEY = "hotelGuests";
+
+let payments = loadData(PAYMENT_KEY);
+let reservations = loadData(RESERVATION_KEY);
+let guests = loadData(GUEST_KEY);
+let editingPaymentId = null;
+
+function loadData(key) {
+    try {
+        const value = JSON.parse(localStorage.getItem(key) || "[]");
+        return Array.isArray(value) ? value : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function savePayments() {
+    localStorage.setItem(PAYMENT_KEY, JSON.stringify(payments));
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+    }[char]));
+}
+
+function money(value) {
+    return "₦" + Number(value || 0).toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function guestName(guestId) {
+    const guest = guests.find(item => item.id === guestId);
+    return guest ? guest.fullName : "Guest record unavailable";
+}
+
+function getReservation(id) {
+    return reservations.find(item => item.id === id);
+}
+
+function reservationCost(reservation) {
+    return Math.max(0, Number(reservation?.totalCost) || 0);
+}
+
+function paymentsFor(id, excludeId = null) {
+    return payments.filter(payment =>
+        payment.reservationId === id &&
+        payment.id !== excludeId
+    );
+}
+
+function paidFor(id, excludeId = null) {
+    return paymentsFor(id, excludeId).reduce((sum, payment) =>
+        sum + Math.max(0, Number(payment.amount) || 0), 0);
+}
+
+function getBalance(id, excludeId = null) {
+    const reservation = getReservation(id);
+    if (!reservation) return 0;
+
+    return Math.max(0, reservationCost(reservation) - paidFor(id, excludeId));
+}
+
+function getPaymentStatus(id) {
+    const reservation = getReservation(id);
+    if (!reservation) return "Unpaid";
+
+    const total = reservationCost(reservation);
+    const paid = paidFor(id);
+
+    if (total > 0 && paid >= total) return "Fully Paid";
+    if (paid > 0) return "Partially Paid";
+    return "Unpaid";
+}
+
+function getPaymentStatusClass(status) {
+    if (status === "Fully Paid") return "paid";
+    if (status === "Partially Paid") return "partial";
+    return "unpaid";
+}
+
+function refreshSources() {
+    reservations = loadData(RESERVATION_KEY);
+    guests = loadData(GUEST_KEY);
+    payments = loadData(PAYMENT_KEY);
+}
+
+function populateReservations(selectedId = "") {
+    const select = document.getElementById("bookingId");
+
+    select.innerHTML = '<option value="">Select reservation</option>' +
+        reservations
+        .filter(reservation => reservation.status !== "Cancelled")
+        .map(reservation => {
+            const name = guestName(reservation.guestId);
+            return `<option value="${escapeHTML(reservation.id)}"
+                ${reservation.id === selectedId ? "selected" : ""}>
+                ${escapeHTML(reservation.bookingId)} — ${escapeHTML(name)}
+                — ${money(reservation.totalCost)}
+            </option>`;
+        }).join("");
+}
+
+function showMessage(message, type = "error") {
+    const box = document.getElementById("formMessage");
+    box.textContent = message;
+    box.className = "message " + type;
+}
+
+function clearMessage() {
+    const box = document.getElementById("formMessage");
+    box.textContent = "";
+    box.className = "message";
+}
+
+function updatePreview() {
+    const id = document.getElementById("bookingId").value;
+    const reservation = getReservation(id);
+    const amount = Number(document.getElementById("paymentAmount").value) || 0;
+    const previous = id ? paidFor(id, editingPaymentId) : 0;
+    const total = reservation ? reservationCost(reservation) : 0;
+    const balance = Math.max(0, total - previous - amount);
+
+    document.getElementById("bookingTotal").value = money(total);
+    document.getElementById("previousPaid").value = money(previous);
+    document.getElementById("currentAmount").textContent = money(amount);
+    document.getElementById("balanceAfter").textContent = money(balance);
+
+    let status = "Unpaid";
+    if (amount + previous >= total && total > 0) {
+        status = "Fully Paid";
+    } else if (amount + previous > 0) {
+        status = "Partially Paid";
+    }
+
+    document.getElementById("paymentStatusPreview").textContent = status;
+}
+
+function renderPayments() {
+    const query = document.getElementById("paymentSearch")
+        .value.trim().toLowerCase();
+
+    const filtered = payments.filter(payment => {
+        const reservation = getReservation(payment.reservationId);
+        const text = [
+            payment.reference,
+            reservation?.bookingId,
+            guestName(reservation?.guestId),
+            payment.method,
+            payment.transactionRef
+        ].join(" ").toLowerCase();
+
+        return text.includes(query);
+    });
+
+    document.getElementById("paymentTable").innerHTML =
+        filtered.slice().reverse().map(payment => {
+            const reservation = getReservation(payment.reservationId);
+
+            return `<tr>
+                <td>${escapeHTML(payment.reference)}</td>
+                <td>${escapeHTML(guestName(reservation?.guestId))}</td>
+                <td>${escapeHTML(reservation?.bookingId || "Unavailable")}</td>
+                <td>${escapeHTML(payment.date)}</td>
+                <td>${escapeHTML(payment.method)}</td>
+                <td>${money(payment.amount)}</td>
+                <td><div class="actions">
+                    <button class="btn btn-edit"
+                    data-receipt="${escapeHTML(payment.id)}">Receipt</button>
+                    <button class="btn btn-edit"
+                    data-edit="${escapeHTML(payment.id)}">Edit</button>
+                    <button class="btn btn-delete"
+                    data-delete="${escapeHTML(payment.id)}">Delete</button>
+                </div></td>
+            </tr>`;
+        }).join("");
+
+    document.getElementById("emptyMessage").hidden = filtered.length > 0;
+    document.getElementById("emptyMessage").textContent =
+        payments.length === 0
+        ? "No payments recorded yet."
+        : "No payments match your search.";
+
+    renderSummary();
+    renderStatistics();
+}
+
+function renderStatistics() {
+    const totalCollections = payments.reduce((sum, payment) =>
+        sum + Math.max(0, Number(payment.amount) || 0), 0);
+
+    const outstanding = reservations
+        .filter(reservation => reservation.status !== "Cancelled")
+        .reduce((sum, reservation) =>
+            sum + getBalance(reservation.id), 0);
+
+    document.getElementById("reservationCount").textContent =
+        reservations.filter(r => r.status !== "Cancelled").length;
+
+    document.getElementById("totalCollections").textContent =
+        money(totalCollections);
+
+    document.getElementById("totalOutstanding").textContent =
+        money(outstanding);
+
+    document.getElementById("fullyPaidCount").textContent =
+        reservations.filter(r =>
+            r.status !== "Cancelled" &&
+            getPaymentStatus(r.id) === "Fully Paid"
+        ).length;
+}
+
+function renderSummary() {
+    const validReservations = reservations.filter(
+        reservation => reservation.status !== "Cancelled"
+    );
+
+    document.getElementById("summaryTable").innerHTML =
+        validReservations.map(reservation => {
+            const total = reservationCost(reservation);
+            const paid = paidFor(reservation.id);
+            const balance = Math.max(0, total - paid);
+            const status = getPaymentStatus(reservation.id);
+
+            return `<tr>
+                <td>${escapeHTML(reservation.bookingId)}</td>
+                <td>${escapeHTML(guestName(reservation.guestId))}</td>
+                <td>${money(total)}</td>
+                <td>${money(paid)}</td>
+                <td>${money(balance)}</td>
+                <td><span class="badge ${getPaymentStatusClass(status)}">
+                    ${status}
+                </span></td>
+                <td><button class="btn btn-light"
+                    data-booking-receipt="${escapeHTML(reservation.id)}">
+                    Summary
+                </button></td>
+            </tr>`;
+        }).join("");
+
+    document.getElementById("summaryEmpty").hidden =
+        validReservations.length > 0;
+}
+
+document.getElementById("bookingId").addEventListener("change", updatePreview);
+document.getElementById("paymentAmount").addEventListener("input", updatePreview);
+
+document.getElementById("paymentForm").addEventListener("submit", event => {
+    event.preventDefault();
+    clearMessage();
+    refreshSources();
+
+    const reservationId = document.getElementById("bookingId").value;
+    const reservation = getReservation(reservationId);
+    const amount = Number(document.getElementById("paymentAmount").value);
+    const method = document.getElementById("paymentMethod").value;
+    const date = document.getElementById("paymentDate").value;
+    const transactionRef = document.getElementById("transactionRef").value.trim();
+    const notes = document.getElementById("paymentNotes").value.trim();
+
+    if (!reservation || reservation.status === "Cancelled") {
+        showMessage("Please select a valid, active reservation.");
+        return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        showMessage("Enter a payment amount greater than zero.");
+        return;
+    }
+
+    if (!date || !Number.isFinite(Date.parse(date + "T00:00:00Z"))) {
+        showMessage("Please select a valid payment date.");
+        return;
+    }
+
+    const balance = getBalance(reservationId, editingPaymentId);
+
+    if (amount > balance + 0.001) {
+        showMessage("This payment exceeds the outstanding balance of " +
+            money(balance) + ".");
+        return;
+    }
+
+    const record = {
+        reservationId,
+        amount: Math.round(amount * 100) / 100,
+        method,
+        date,
+        transactionRef,
+        notes
+    };
+
+    if (editingPaymentId) {
+        const index = payments.findIndex(p => p.id === editingPaymentId);
+
+        if (index === -1) {
+            showMessage("Payment not found. Refresh and try again.");
+            return;
+        }
+
+        payments[index] = {...payments[index], ...record};
+        showMessage("Payment updated successfully.", "success");
+    } else {
+        record.id = Date.now().toString() +
+            Math.random().toString(36).slice(2, 8);
+
+        record.reference = "PAY-" +
+            Date.now().toString().slice(-9);
+
+        record.createdAt = new Date().toISOString();
+        payments.push(record);
+        showMessage("Payment recorded. Reference: " +
+            record.reference, "success");
+    }
+
+    savePayments();
+    resetForm();
+    renderPayments();
+});
+
+document.getElementById("paymentTable").addEventListener("click", event => {
+    const edit = event.target.closest("[data-edit]");
+    const remove = event.target.closest("[data-delete]");
+    const receipt = event.target.closest("[data-receipt]");
+
+    if (edit) editPayment(edit.dataset.edit);
+    if (remove) deletePayment(remove.dataset.delete);
+    if (receipt) printReceipt(receipt.dataset.receipt);
+});
+
+document.getElementById("summaryTable").addEventListener("click", event => {
+    const button = event.target.closest("[data-booking-receipt]");
+    if (button) printBookingSummary(button.dataset.bookingReceipt);
+});
+
+function editPayment(id) {
+    const payment = payments.find(item => item.id === id);
+    if (!payment) return;
+
+    editingPaymentId = id;
+    populateReservations(payment.reservationId);
+
+    document.getElementById("bookingId").value = payment.reservationId;
+    document.getElementById("paymentAmount").value = payment.amount;
+    document.getElementById("paymentMethod").value = payment.method;
+    document.getElementById("paymentDate").value = payment.date;
+    document.getElementById("transactionRef").value =
+        payment.transactionRef || "";
+    document.getElementById("paymentNotes").value = payment.notes || "";
+
+    document.getElementById("formTitle").textContent = "Edit Payment";
+    document.getElementById("saveButton").textContent = "Update Payment";
+    document.getElementById("cancelEdit").hidden = false;
+
+    updatePreview();
+    clearMessage();
+    document.getElementById("paymentForm").scrollIntoView({behavior:"smooth"});
+}
+
+function deletePayment(id) {
+    const payment = payments.find(item => item.id === id);
+    if (!payment) return;
+
+    if (!confirm("Delete payment " + payment.reference +
+        "? The outstanding balance will be recalculated.")) return;
+
+    payments = payments.filter(item => item.id !== id);
+
+    if (editingPaymentId === id) resetForm();
+
+    savePayments();
+    renderPayments();
+}
+
+function resetForm() {
+    document.getElementById("paymentForm").reset();
+    editingPaymentId = null;
+
+    document.getElementById("formTitle").textContent = "Record a Payment";
+    document.getElementById("saveButton").textContent = "Save Payment";
+    document.getElementById("cancelEdit").hidden = true;
+
+    document.getElementById("paymentDate").value =
+        new Date().toISOString().slice(0, 10);
+
+    populateReservations();
+    updatePreview();
+}
+
+function printReceipt(id) {
+    const payment = payments.find(item => item.id === id);
+    if (!payment) return;
+
+    const reservation = getReservation(payment.reservationId);
+    const guest = guestName(reservation?.guestId);
+    const paid = paidFor(payment.reservationId);
+    const total = reservationCost(reservation);
+    const balance = Math.max(0, total - paid);
+
+    printDocument("Payment Receipt", `
+        <h1>GRANDSTAY HOTEL</h1>
+        <h2>PAYMENT RECEIPT</h2>
+        <p><strong>Receipt Reference:</strong> ${escapeHTML(payment.reference)}</p>
+        <p><strong>Guest:</strong> ${escapeHTML(guest)}</p>
+        <p><strong>Reservation:</strong> ${escapeHTML(reservation?.bookingId || "")}</p>
+        <p><strong>Payment Date:</strong> ${escapeHTML(payment.date)}</p>
+        <p><strong>Payment Method:</strong> ${escapeHTML(payment.method)}</p>
+        <p><strong>Transaction Reference:</strong> ${escapeHTML(payment.transactionRef || "N/A")}</p>
+        <hr>
+        <p><strong>Amount Received:</strong> ${money(payment.amount)}</p>
+        <p><strong>Total Booking Cost:</strong> ${money(total)}</p>
+        <p><strong>Total Paid:</strong> ${money(paid)}</p>
+        <p><strong>Outstanding Balance:</strong> ${money(balance)}</p>
+        <p><strong>Payment Status:</strong> ${getPaymentStatus(payment.reservationId)}</p>
+        <p>Thank you for choosing GrandStay Hotel.</p>
+        <p>Authorized Signature: __________________</p>
+        <p><small>This receipt reflects a locally recorded payment, not independent confirmation of a bank transaction.</small></p>
+    `);
+}
+
+function printBookingSummary(id) {
+    const reservation = getReservation(id);
+    if (!reservation) return;
+
+    printDocument("Booking Payment Summary", `
+        <h1>GRANDSTAY HOTEL</h1>
+        <h2>BOOKING PAYMENT SUMMARY</h2>
+        <p><strong>Reservation:</strong> ${escapeHTML(reservation.bookingId)}</p>
+        <p><strong>Guest:</strong> ${escapeHTML(guestName(reservation.guestId))}</p>
+        <p><strong>Booking Cost:</strong> ${money(reservationCost(reservation))}</p>
+        <p><strong>Total Paid:</strong> ${money(paidFor(id))}</p>
+        <p><strong>Outstanding Balance:</strong> ${money(getBalance(id))}</p>
+        <p><strong>Status:</strong> ${getPaymentStatus(id)}</p>
+        <hr><h3>Recorded Payments</h3>
+        ${paymentsFor(id).map(payment => `
+            <p>${escapeHTML(payment.reference)} — ${escapeHTML(payment.date)}
+            — ${escapeHTML(payment.method)} — ${money(payment.amount)}</p>
+        `).join("")}
+        <p>Authorized Signature: __________________</p>
+    `);
+}
+
+function printDocument(title, content) {
+    const win = window.open("", "_blank");
+
+    if (!win) {
+        alert("Allow pop-ups for this website to print receipts.");
+        return;
+    }
+
+    win.document.write(`<!DOCTYPE html>
+    <html><head><title>${escapeHTML(title)}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    body{font-family:Arial,sans-serif;max-width:700px;margin:30px auto;padding:20px;color:#263445}
+    h1,h2{text-align:center;margin-bottom:15px}
+    p{margin:12px 0;line-height:1.5}
+    hr{margin:20px 0}
+    @media print{button{display:none}}
+    </style></head><body>
+    ${content}
+    <button onclick="window.print()">Print / Save as PDF</button>
+    </body></html>`);
+
+    win.document.close();
+}
+
+document.getElementById("cancelEdit").addEventListener("click", () => {
+    clearMessage();
+    resetForm();
+});
+
+document.getElementById("paymentSearch").addEventListener("input", renderPayments);
+
+function initialize() {
+    refreshSources();
+    populateReservations();
+
+    document.getElementById("paymentDate").value =
+        new Date().toISOString().slice(0, 10);
+
+    renderPayments();
+    updatePreview();
+}
+
+initialize();
+</script>
+</main>
+</div>
+</body>
+  </html>
