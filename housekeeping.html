@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housekeeping & Maintenance | GrandStay Hotel</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#243047}
+header{background:#152b49;color:white;padding:20px}
+header h1{margin:0 0 6px;font-size:25px}
+header p{margin:0;color:#d8e3f2}
+nav{background:#203c60;padding:12px;display:flex;gap:15px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-weight:bold;font-size:14px}
+.container{max-width:1250px;margin:20px auto;padding:0 15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:15px;margin-bottom:20px}
+.card,.panel{background:white;border-radius:10px;padding:18px;box-shadow:0 2px 8px #0000000d;margin-bottom:20px}
+.card h3{font-size:13px;color:#667085;margin:0 0 10px}
+.card strong{font-size:25px;color:#17375e}
+h2{font-size:20px;margin-top:0}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ccd3dc;border-radius:6px;font-size:14px;background:white}
+textarea{min-height:75px;resize:vertical}
+button{border:0;border-radius:6px;padding:10px 14px;font-weight:bold;cursor:pointer;margin:3px}
+.primary{background:#1d5ca8;color:white}
+.success{background:#16845b;color:white}
+.danger{background:#c83e4d;color:white}
+.secondary{background:#e7edf5;color:#243047}
+.small{font-size:12px;padding:7px 9px}
+.actions{margin-top:15px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:950px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #e7ebf0;font-size:13px}
+th{background:#f0f4f8}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:bold;background:#e8eef7}
+.done{background:#d9f5e5;color:#146c43}
+.pending{background:#fff0cc;color:#875d00}
+.urgent{background:#fce2e4;color:#a61b29}
+.notice{padding:12px;background:#eaf3ff;border-radius:7px;margin-bottom:15px;font-size:13px}
+.muted{color:#697586;font-size:13px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.hidden{display:none!important}
+@media(max-width:600px){
+ header h1{font-size:22px}
+ .panel,.card{padding:13px}
+ button{margin:2px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>GrandStay Hotel</h1>
+<p>Housekeeping and Room Maintenance Management</p>
+</header>
+
+<nav>
+<a href="index.html">Dashboard</a>
+<a href="rooms.html">Rooms</a>
+<a href="guests.html">Guests</a>
+<a href="reservations.html">Reservations</a>
+<a href="payments.html">Payments</a>
+<a href="staff.html">Staff</a>
+<a href="housekeeping.html">Housekeeping</a>
+</nav>
+
+<main class="container">
+
+<div class="notice">
+Manage room cleaning, staff assignments, inspections, and maintenance problems in one place.
+</div>
+
+<div class="cards">
+<div class="card">
+<h3>Total Tasks</h3>
+<strong id="totalTasks">0</strong>
+</div>
+<div class="card">
+<h3>Pending Tasks</h3>
+<strong id="pendingTasks">0</strong>
+</div>
+<div class="card">
+<h3>Completed Tasks</h3>
+<strong id="completedTasks">0</strong>
+</div>
+<div class="card">
+<h3>Open Maintenance</h3>
+<strong id="openMaintenance">0</strong>
+</div>
+<div class="card">
+<h3>Rooms Being Cleaned</h3>
+<strong id="roomsCleaning">0</strong>
+</div>
+</div>
+
+<section class="panel" id="taskFormPanel">
+<h2 id="formTitle">Create Housekeeping or Maintenance Task</h2>
+
+<form id="taskForm">
+<input type="hidden" id="taskId">
+
+<div class="form-grid">
+
+<div>
+<label for="taskType">Task Type *</label>
+<select id="taskType" required>
+<option value="Housekeeping">Housekeeping / Cleaning</option>
+<option value="Maintenance">Room Maintenance</option>
+</select>
+</div>
+
+<div>
+<label for="roomSelect">Room Number *</label>
+<select id="roomSelect" required>
+<option value="">Select Room</option>
+</select>
+</div>
+
+<div>
+<label for="assignedStaff">Assign Staff Member</label>
+<select id="assignedStaff">
+<option value="">Unassigned</option>
+</select>
+</div>
+
+<div>
+<label for="taskDate">Task Date *</label>
+<input type="date" id="taskDate" required>
+</div>
+
+<div>
+<label for="priority">Priority *</label>
+<select id="priority" required>
+<option value="Normal">Normal</option>
+<option value="Low">Low</option>
+<option value="High">High</option>
+<option value="Urgent">Urgent</option>
+</select>
+</div>
+
+<div>
+<label for="taskStatus">Task Status *</label>
+<select id="taskStatus" required>
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+<option value="Completed">Completed</option>
+</select>
+</div>
+
+<div id="cleaningStatusField">
+<label for="cleaningStatus">Room Cleaning Status</label>
+<select id="cleaningStatus">
+<option value="Dirty">Dirty</option>
+<option value="Cleaning">Cleaning</option>
+<option value="Clean">Clean</option>
+<option value="Inspected">Inspected</option>
+</select>
+</div>
+
+<div id="maintenanceStatusField" class="hidden">
+<label for="maintenanceStatus">Maintenance Status</label>
+<select id="maintenanceStatus">
+<option value="Reported">Reported</option>
+<option value="In Progress">In Progress</option>
+<option value="Resolved">Resolved</option>
+</select>
+</div>
+
+<div>
+<label for="estimatedCost">Estimated Repair Cost (₦)</label>
+<input type="number" id="estimatedCost" min="0" step="0.01" value="0">
+</div>
+
+<div>
+<label for="actualCost">Actual Repair Cost (₦)</label>
+<input type="number" id="actualCost" min="0" step="0.01" value="0">
+</div>
+
+<div style="grid-column:1/-1">
+<label for="description">Task Description / Problem *</label>
+<textarea id="description" required maxlength="1000" placeholder="Describe the cleaning task or maintenance problem..."></textarea>
+</div>
+
+<div style="grid-column:1/-1">
+<label for="taskNotes">Additional Notes</label>
+<textarea id="taskNotes" maxlength="1000" placeholder="Optional notes, inspection findings, or repair details"></textarea>
+</div>
+
+</div>
+
+<div class="actions">
+<button type="submit" class="primary" id="saveButton">Save Task</button>
+<button type="button" class="secondary" id="clearButton">Clear Form</button>
+</div>
+
+</form>
+</section>
+
+<section class="panel">
+<div class="section-title">
+<h2>Housekeeping and Maintenance Tasks</h2>
+<input id="taskSearch" placeholder="Search room, task, or staff..." style="max-width:330px">
+</div>
+
+<div class="form-grid" style="margin-bottom:15px">
+<div>
+<label for="typeFilter">Filter by Type</label>
+<select id="typeFilter">
+<option value="">All Types</option>
+<option value="Housekeeping">Housekeeping</option>
+<option value="Maintenance">Maintenance</option>
+</select>
+</div>
+<div>
+<label for="statusFilter">Filter by Status</label>
+<select id="statusFilter">
+<option value="">All Statuses</option>
+<option value="Pending">Pending</option>
+<option value="In Progress">In Progress</option>
+<option value="Completed">Completed</option>
+</select>
+</div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Task ID</th>
+<th>Type</th>
+<th>Room</th>
+<th>Assigned Staff</th>
+<th>Priority</th>
+<th>Date</th>
+<th>Status</th>
+<th>Description</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="taskTableBody"></tbody>
+</table>
+</div>
+</section>
+<section class="panel">
+<h2>Maintenance Cost Summary</h2>
+<div class="cards">
+  <div class="card">
+    <h3>Total Estimated Cost</h3>
+    <strong id="totalEstimatedCost">₦0.00</strong>
+  </div>
+  <div class="card">
+    <h3>Total Actual Cost</h3>
+    <strong id="totalActualCost">₦0.00</strong>
+  </div>
+</div>
+<p class="muted">These figures summarize the estimated and actual costs recorded for maintenance tasks.</p>
+</section>
+
+</main>
+
+<script>
+const TASKS_KEY = "hotelHousekeepingTasks";
+
+let tasks = readTasks();
+
+function readTasks(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
+    return Array.isArray(saved) ? saved : [];
+  }catch(error){
+    return [];
+  }
+}
+
+function saveTasks(){
+  localStorage.setItem(TASKS_KEY,JSON.stringify(tasks));
+}
+
+function safeText(value){
+  return String(value ?? "").replace(/[&<>"']/g,function(char){
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char];
+  });
+}
+
+function currency(value){
+  return "₦" + Number(value || 0).toLocaleString("en-NG",{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+
+function newTaskId(){
+  return "HK-" + Date.now().toString().slice(-8) +
+    "-" + Math.random().toString(36).slice(2,5).toUpperCase();
+}
+
+function getRooms(){
+  try{
+    const data = JSON.parse(localStorage.getItem("hotelRooms") || "[]");
+    return Array.isArray(data) ? data : [];
+  }catch(error){
+    return [];
+  }
+}
+
+function getStaff(){
+  try{
+    const data = JSON.parse(localStorage.getItem("hotelStaff") || "[]");
+    return Array.isArray(data) ? data : [];
+  }catch(error){
+    return [];
+  }
+}
+
+function roomNumber(room){
+  return room.roomNumber ?? room.number ?? room.id ?? "";
+}
+
+function renderRoomOptions(selectedId){
+  const select = document.getElementById("roomSelect");
+  const rooms = getRooms();
+  const previous = selectedId || select.value;
+
+  select.innerHTML = '<option value="">Select Room</option>';
+
+  rooms.forEach(room => {
+    const number = roomNumber(room);
+    const option = document.createElement("option");
+    option.value = String(room.id ?? number);
+    option.textContent = "Room " + number +
+      (room.type ? " - " + room.type : "");
+    select.appendChild(option);
+  });
+
+  if(previous && Array.from(select.options).some(o => o.value === String(previous))){
+    select.value = String(previous);
+  }
+}
+
+function renderStaffOptions(selectedId){
+  const select = document.getElementById("assignedStaff");
+  const staff = getStaff();
+  const previous = selectedId || select.value;
+
+  select.innerHTML = '<option value="">Unassigned</option>';
+
+  staff.filter(person => person.status !== "Inactive").forEach(person => {
+    const option = document.createElement("option");
+    option.value = String(person.id);
+    option.textContent = (person.staffId || "") +
+      " - " + (person.fullName || "Unnamed Staff");
+    select.appendChild(option);
+  });
+
+  if(previous && Array.from(select.options).some(o => o.value === String(previous))){
+    select.value = String(previous);
+  }
+}
+
+function getRoomLabel(id){
+  const room = getRooms().find(r => String(r.id ?? roomNumber(r)) === String(id));
+  return room ? roomNumber(room) : id || "Unknown";
+}
+
+function getStaffLabel(id){
+  const person = getStaff().find(s => String(s.id) === String(id));
+  return person ? person.fullName : (id ? "Staff unavailable" : "Unassigned");
+}
+
+function syncTaskFields(){
+  const isMaintenance =
+    document.getElementById("taskType").value === "Maintenance";
+
+  document.getElementById("cleaningStatusField")
+    .classList.toggle("hidden",isMaintenance);
+
+  document.getElementById("maintenanceStatusField")
+    .classList.toggle("hidden",!isMaintenance);
+}
+
+document.getElementById("taskType").addEventListener("change",syncTaskFields);
+
+document.getElementById("taskForm").addEventListener("submit",function(event){
+  event.preventDefault();
+
+  const id = document.getElementById("taskId").value;
+  const existing = tasks.find(t => t.id === id);
+
+  const type = document.getElementById("taskType").value;
+  const status = document.getElementById("taskStatus").value;
+  const cleaningStatus = document.getElementById("cleaningStatus").value;
+  const maintenanceStatus = document.getElementById("maintenanceStatus").value;
+
+  const record = {
+    id: id || newTaskId(),
+    type: type,
+    roomId: document.getElementById("roomSelect").value,
+    staffId: document.getElementById("assignedStaff").value,
+    date: document.getElementById("taskDate").value,
+    priority: document.getElementById("priority").value,
+    status: status,
+    cleaningStatus: type === "Housekeeping" ? cleaningStatus : "",
+    maintenanceStatus: type === "Maintenance" ? maintenanceStatus : "",
+    estimatedCost: type === "Maintenance"
+      ? Number(document.getElementById("estimatedCost").value || 0) : 0,
+    actualCost: type === "Maintenance"
+      ? Number(document.getElementById("actualCost").value || 0) : 0,
+    description: document.getElementById("description").value.trim(),
+    notes: document.getElementById("taskNotes").value.trim(),
+    createdAt: existing ? existing.createdAt : new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  if(!record.roomId || !record.date || !record.description){
+    alert("Please select a room, date, and enter a task description.");
+    return;
+  }
+
+  if(record.estimatedCost < 0 || record.actualCost < 0){
+    alert("Costs cannot be negative.");
+    return;
+  }
+
+  if(existing){
+    tasks = tasks.map(t => t.id === id ? record : t);
+  }else{
+    tasks.push(record);
+  }
+
+  saveTasks();
+  this.reset();
+  document.getElementById("taskId").value = "";
+  document.getElementById("taskDate").value = today();
+  document.getElementById("taskStatus").value = "Pending";
+  document.getElementById("priority").value = "Normal";
+  document.getElementById("estimatedCost").value = "0";
+  document.getElementById("actualCost").value = "0";
+  document.getElementById("formTitle").textContent =
+    "Create Housekeeping or Maintenance Task";
+  document.getElementById("saveButton").textContent = "Save Task";
+  syncTaskFields();
+  renderAll();
+
+  alert(existing ? "Task updated successfully." : "Task created successfully.");
+});
+
+function editTask(id){
+  const task = tasks.find(t => t.id === id);
+  if(!task) return;
+
+  document.getElementById("taskId").value = task.id;
+  document.getElementById("taskType").value = task.type;
+  renderRoomOptions(task.roomId);
+  renderStaffOptions(task.staffId);
+
+  document.getElementById("taskDate").value = task.date;
+  document.getElementById("priority").value = task.priority;
+  document.getElementById("taskStatus").value = task.status;
+  document.getElementById("cleaningStatus").value =
+    task.cleaningStatus || "Dirty";
+  document.getElementById("maintenanceStatus").value =
+    task.maintenanceStatus || "Reported";
+  document.getElementById("estimatedCost").value = task.estimatedCost || 0;
+  document.getElementById("actualCost").value = task.actualCost || 0;
+  document.getElementById("description").value = task.description || "";
+  document.getElementById("taskNotes").value = task.notes || "";
+
+  document.getElementById("formTitle").textContent = "Edit Task";
+  document.getElementById("saveButton").textContent = "Update Task";
+
+  syncTaskFields();
+  document.getElementById("taskFormPanel")
+    .scrollIntoView({behavior:"smooth"});
+}
+
+function deleteTask(id){
+  const task = tasks.find(t => t.id === id);
+  if(!task) return;
+
+  if(confirm("Delete this housekeeping or maintenance task?")){
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks();
+    renderAll();
+  }
+}
+
+function renderTasks(){
+  const query = document.getElementById("taskSearch").value.toLowerCase();
+  const typeFilter = document.getElementById("typeFilter").value;
+  const statusFilter = document.getElementById("statusFilter").value;
+
+  const filtered = tasks.filter(task => {
+    const searchable = [
+      task.id,
+      task.type,
+      getRoomLabel(task.roomId),
+      getStaffLabel(task.staffId),
+      task.priority,
+      task.status,
+      task.description,
+      task.maintenanceStatus,
+      task.cleaningStatus
+    ].join(" ").toLowerCase();
+
+    return searchable.includes(query) &&
+      (!typeFilter || task.type === typeFilter) &&
+      (!statusFilter || task.status === statusFilter);
+  }).slice().reverse();
+
+  const body = document.getElementById("taskTableBody");
+
+  if(!filtered.length){
+    body.innerHTML =
+      '<tr><td colspan="9">No matching tasks found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML = filtered.map(task => {
+    const priorityClass = task.priority === "Urgent" ||
+      task.priority === "High" ? "urgent" : "";
+
+    const statusClass = task.status === "Completed" ? "done" :
+      task.status === "Pending" ? "pending" : "";
+
+    const detailStatus = task.type === "Housekeeping"
+      ? task.cleaningStatus
+      : task.maintenanceStatus;
+
+    return `
+      <tr>
+        <td>${safeText(task.id)}</td>
+        <td>${safeText(task.type)}</td>
+        <td>${safeText(getRoomLabel(task.roomId))}</td>
+        <td>${safeText(getStaffLabel(task.staffId))}</td>
+        <td><span class="badge ${priorityClass}">${safeText(task.priority)}</span></td>
+        <td>${safeText(task.date)}</td>
+        <td>
+          <span class="badge ${statusClass}">${safeText(task.status)}</span>
+          <br><small>${safeText(detailStatus || "")}</small>
+        </td>
+        <td>${safeText(task.description)}</td>
+        <td>
+          <button class="primary small" onclick="editTask('${task.id}')">Edit</button>
+          <button class="danger small" onclick="deleteTask('${task.id}')">Delete</button>
+        </td>
+      </tr>`;
+  }).join("");
+}
+
+function renderStatistics(){
+  document.getElementById("totalTasks").textContent = tasks.length;
+
+  document.getElementById("pendingTasks").textContent =
+    tasks.filter(t => t.status !== "Completed").length;
+
+  document.getElementById("completedTasks").textContent =
+    tasks.filter(t => t.status === "Completed").length;
+
+  document.getElementById("openMaintenance").textContent =
+    tasks.filter(t =>
+      t.type === "Maintenance" &&
+      t.maintenanceStatus !== "Resolved"
+    ).length;
+
+  document.getElementById("roomsCleaning").textContent =
+    tasks.filter(t =>
+      t.type === "Housekeeping" &&
+      t.cleaningStatus === "Cleaning"
+    ).length;
+
+  const maintenance = tasks.filter(t => t.type === "Maintenance");
+
+  const estimated = maintenance.reduce((sum,t) =>
+    sum + Number(t.estimatedCost || 0),0);
+
+  const actual = maintenance.reduce((sum,t) =>
+    sum + Number(t.actualCost || 0),0);
+
+  document.getElementById("totalEstimatedCost").textContent =
+    currency(estimated);
+
+  document.getElementById("totalActualCost").textContent =
+    currency(actual);
+}
+
+function renderAll(){
+  renderRoomOptions();
+  renderStaffOptions();
+  renderTasks();
+  renderStatistics();
+}
+
+function today(){
+  const now = new Date();
+  const localDate = new Date(now.getTime() - now.getTimezoneOffset()*60000);
+  return localDate.toISOString().slice(0,10);
+}
+
+document.getElementById("clearButton").addEventListener("click",function(){
+  document.getElementById("taskForm").reset();
+  document.getElementById("taskId").value = "";
+  document.getElementById("taskDate").value = today();
+  document.getElementById("taskStatus").value = "Pending";
+  document.getElementById("priority").value = "Normal";
+  document.getElementById("estimatedCost").value = "0";
+  document.getElementById("actualCost").value = "0";
+  document.getElementById("formTitle").textContent =
+    "Create Housekeeping or Maintenance Task";
+  document.getElementById("saveButton").textContent = "Save Task";
+  syncTaskFields();
+});
+
+document.getElementById("taskSearch").addEventListener("input",renderTasks);
+document.getElementById("typeFilter").addEventListener("change",renderTasks);
+document.getElementById("statusFilter").addEventListener("change",renderTasks);
+
+document.getElementById("taskDate").value = today();
+renderRoomOptions();
+renderStaffOptions();
+syncTaskFields();
+renderAll();
+</script>
+</body>
+  </html>
