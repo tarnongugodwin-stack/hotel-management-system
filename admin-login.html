@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login | GrandStay Hotel</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:Arial,sans-serif;
+  background:#edf1f7;
+  color:#243047;
+  padding:20px;
+}
+.login-card{
+  width:100%;
+  max-width:420px;
+  background:white;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 8px 30px #00000012;
+}
+.logo{
+  width:65px;
+  height:65px;
+  margin:0 auto 15px;
+  border-radius:50%;
+  background:#17375e;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:27px;
+  font-weight:bold;
+}
+h1{
+  text-align:center;
+  margin:0 0 8px;
+  font-size:25px;
+  color:#17375e;
+}
+.subtitle{
+  text-align:center;
+  color:#697586;
+  font-size:14px;
+  margin:0 0 25px;
+  line-height:1.5;
+}
+label{
+  display:block;
+  font-weight:bold;
+  font-size:13px;
+  margin-bottom:7px;
+}
+input{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccd3dc;
+  border-radius:7px;
+  font-size:15px;
+  outline:none;
+}
+input:focus{
+  border-color:#1d5ca8;
+  box-shadow:0 0 0 2px #1d5ca822;
+}
+.form-group{margin-bottom:18px}
+.password-wrap{
+  display:flex;
+  gap:6px;
+}
+.password-wrap input{flex:1;min-width:0}
+button{
+  border:0;
+  border-radius:7px;
+  padding:12px 15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.show-button{
+  background:#e7edf5;
+  color:#243047;
+  white-space:nowrap;
+}
+.login-button{
+  width:100%;
+  background:#1d5ca8;
+  color:white;
+  font-size:15px;
+  margin-top:5px;
+}
+.login-button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+.message{
+  display:none;
+  padding:12px;
+  border-radius:7px;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:15px;
+}
+.error{
+  display:block;
+  color:#a61b29;
+  background:#fce2e4;
+}
+.info{
+  display:block;
+  color:#174b80;
+  background:#eaf3ff;
+}
+.back-link{
+  display:block;
+  text-align:center;
+  margin-top:22px;
+  color:#1d5ca8;
+  text-decoration:none;
+  font-size:14px;
+}
+.security-note{
+  margin-top:20px;
+  padding:12px;
+  background:#fff0cc;
+  color:#775300;
+  border-radius:7px;
+  font-size:12px;
+  line-height:1.5;
+}
+footer{
+  text-align:center;
+  color:#8993a3;
+  font-size:12px;
+  margin-top:22px;
+}
+</style>
+</head>
+
+<body>
+
+<main class="login-card">
+  <div class="logo">G</div>
+
+  <h1>GrandStay Hotel</h1>
+  <p class="subtitle">Administrator Sign In<br>
+  Access the hotel management dashboard.</p>
+
+  <div id="loginMessage" class="message" role="alert"></div>
+
+  <form id="loginForm">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        id="username"
+        autocomplete="username"
+        required
+        maxlength="80"
+        placeholder="Enter administrator username">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+
+      <div class="password-wrap">
+        <input
+          type="password"
+          id="password"
+          autocomplete="current-password"
+          required
+          maxlength="200"
+          placeholder="Enter password">
+
+        <button
+          type="button"
+          id="togglePassword"
+          class="show-button"
+          aria-label="Show password">
+          Show
+        </button>
+      </div>
+    </div>
+
+    <button type="submit" id="loginButton" class="login-button">
+      Sign In
+    </button>
+  </form>
+
+  <a href="index.html" class="back-link">Return to Hotel Dashboard</a>
+
+  <div class="security-note">
+    <strong>Prototype notice:</strong>
+    This GitHub Pages login is for demonstration purposes only.
+    It does not provide secure server-side authentication.
+  </div>
+
+  <footer>GrandStay Hotel Management System</footer>
+</main>
+  
+<script>
+const SESSION_KEY = "grandstayAdminSession";
+const SESSION_DURATION = 30 * 60 * 1000;
+
+const DEMO_USERNAME = "admin";
+const DEMO_PASSWORD = "GrandStay2026!";
+
+const form = document.getElementById("loginForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("loginButton");
+const messageBox = document.getElementById("loginMessage");
+
+function showMessage(message,type){
+  messageBox.textContent = message;
+  messageBox.className = "message " + type;
+}
+
+function readSession(){
+  try{
+    const session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+
+    if(!session || typeof session!=="object"){
+      return null;
+    }
+
+    if(session.expiresAt <= Date.now()){
+      sessionStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+
+    return session;
+  }catch(error){
+    sessionStorage.removeItem(SESSION_KEY);
+    return null;
+  }
+}
+
+function createSession(){
+  const session = {
+    username: DEMO_USERNAME,
+    createdAt: Date.now(),
+    expiresAt: Date.now() + SESSION_DURATION
+  };
+
+  sessionStorage.setItem(SESSION_KEY,JSON.stringify(session));
+}
+
+document.getElementById("togglePassword").addEventListener("click",function(){
+  const isHidden = passwordInput.type === "password";
+
+  passwordInput.type = isHidden ? "text" : "password";
+  this.textContent = isHidden ? "Hide" : "Show";
+  this.setAttribute("aria-label",isHidden ? "Hide password" : "Show password");
+});
+
+form.addEventListener("submit",function(event){
+  event.preventDefault();
+
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
+
+  if(!username || !password){
+    showMessage("Enter your username and password.","error");
+    return;
+  }
+
+  loginButton.disabled = true;
+  loginButton.textContent = "Signing in...";
+
+  if(username === DEMO_USERNAME && password === DEMO_PASSWORD){
+    createSession();
+
+    showMessage("Login successful. Opening dashboard...","info");
+
+    setTimeout(function(){
+      window.location.href = "index.html";
+    },500);
+
+  }else{
+    showMessage("Invalid username or password. Please try again.","error");
+    loginButton.disabled = false;
+    loginButton.textContent = "Sign In";
+    passwordInput.value = "";
+    passwordInput.focus();
+  }
+});
+
+/* Redirect an existing valid demo session to the dashboard. */
+if(readSession()){
+  window.location.replace("index.html");
+}
+</script>
+</body>
+  </html>
