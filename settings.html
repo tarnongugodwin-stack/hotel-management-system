@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Settings | GrandStay Hotel</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#243047}
+header{background:#152b49;color:white;padding:20px}
+header h1{margin:0 0 6px;font-size:25px}
+header p{margin:0;color:#d8e3f2}
+nav{background:#203c60;padding:12px;display:flex;gap:15px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-weight:bold;font-size:14px}
+.container{max-width:1150px;margin:20px auto;padding:0 15px}
+.panel{background:white;border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 2px 8px #0000000d}
+h2{font-size:20px;margin-top:0}
+h3{font-size:16px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ccd3dc;border-radius:6px;font-size:14px;background:white}
+textarea{min-height:85px;resize:vertical}
+button{border:0;border-radius:6px;padding:11px 15px;font-weight:bold;cursor:pointer;margin:3px}
+.primary{background:#1d5ca8;color:white}
+.success{background:#16845b;color:white}
+.danger{background:#c83e4d;color:white}
+.secondary{background:#e7edf5;color:#243047}
+.notice{padding:13px;background:#eaf3ff;border-radius:7px;margin-bottom:15px;font-size:13px;line-height:1.5}
+.warning{padding:13px;background:#fff0cc;color:#775300;border-radius:7px;margin-bottom:15px;font-size:13px;line-height:1.5}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
+.card{background:#f8fafc;border:1px solid #e7ebf0;border-radius:8px;padding:15px}
+.card h3{font-size:13px;color:#667085;margin:0 0 10px}
+.card strong{font-size:22px;color:#17375e;overflow-wrap:anywhere}
+.actions{margin-top:15px}
+.muted{font-size:13px;color:#697586;line-height:1.5}
+.category-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:10px;align-items:center}
+.category-row input{min-width:0}
+.status{font-size:13px;margin-top:10px;line-height:1.5}
+.good{color:#16845b}
+.bad{color:#c83e4d}
+hr{border:0;border-top:1px solid #e7ebf0;margin:20px 0}
+@media(max-width:600px){
+ header h1{font-size:22px}
+ .panel{padding:14px}
+ button{margin:3px 1px}
+}
+@media print{
+ nav,button,input[type=file]{display:none!important}
+ body{background:white}
+ .panel{box-shadow:none;border:1px solid #ddd}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1 id="headerHotelName">GrandStay Hotel</h1>
+<p>Hotel Settings & Administration</p>
+</header>
+
+<nav>
+<a href="index.html">Dashboard</a>
+<a href="rooms.html">Rooms</a>
+<a href="guests.html">Guests</a>
+<a href="reservations.html">Reservations</a>
+<a href="payments.html">Payments</a>
+<a href="staff.html">Staff</a>
+<a href="housekeeping.html">Housekeeping</a>
+<a href="reports.html">Reports</a>
+<a href="settings.html">Settings</a>
+</nav>
+
+<main class="container">
+
+<div class="notice">
+Configure your hotel profile and preferences. You can also download a backup of the records stored in this browser.
+</div>
+
+<section class="panel">
+<h2>1. Hotel Profile</h2>
+
+<form id="profileForm">
+<div class="form-grid">
+
+<div>
+<label for="hotelName">Hotel Name *</label>
+<input id="hotelName" maxlength="120" required>
+</div>
+
+<div>
+<label for="hotelPhone">Phone Number</label>
+<input id="hotelPhone" type="tel" maxlength="30">
+</div>
+
+<div>
+<label for="hotelEmail">Email Address</label>
+<input id="hotelEmail" type="email" maxlength="120">
+</div>
+
+<div>
+<label for="hotelWebsite">Website</label>
+<input id="hotelWebsite" type="text" maxlength="200" placeholder="https://example.com">
+</div>
+
+<div>
+<label for="hotelAddress">Hotel Address</label>
+<textarea id="hotelAddress" maxlength="500"></textarea>
+</div>
+
+<div>
+<label for="hotelLogo">Logo Image URL</label>
+<input id="hotelLogo" type="text" maxlength="500" placeholder="Optional image URL">
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" type="submit">Save Hotel Profile</button>
+<button class="secondary" type="button" id="resetProfile">Reset Form</button>
+</div>
+<p id="profileMessage" class="status"></p>
+</form>
+</section>
+
+<section class="panel">
+<h2>2. Hotel Preferences</h2>
+
+<form id="preferencesForm">
+<div class="form-grid">
+
+<div>
+<label for="currency">Currency</label>
+<select id="currency">
+<option value="NGN">Nigerian Naira (NGN ₦)</option>
+<option value="USD">US Dollar (USD $)</option>
+<option value="GBP">British Pound (GBP £)</option>
+<option value="EUR">Euro (EUR €)</option>
+</select>
+</div>
+
+<div>
+<label for="taxRate">Tax Rate (%)</label>
+<input id="taxRate" type="number" min="0" max="100" step="0.01" required>
+</div>
+
+<div>
+<label for="checkInTime">Default Check-in Time</label>
+<input id="checkInTime" type="time" required>
+</div>
+
+<div>
+<label for="checkOutTime">Default Check-out Time</label>
+<input id="checkOutTime" type="time" required>
+</div>
+
+<div>
+<label for="bookingAdvance">Maximum Booking Advance (Days)</label>
+<input id="bookingAdvance" type="number" min="1" max="1095" required>
+</div>
+
+<div>
+<label for="cancellationHours">Cancellation Notice (Hours)</label>
+<input id="cancellationHours" type="number" min="0" max="720" required>
+</div>
+
+</div>
+
+<div class="actions">
+<button class="primary" type="submit">Save Preferences</button>
+<button class="secondary" type="button" id="resetPreferences">Reset Form</button>
+</div>
+
+<p id="preferencesMessage" class="status"></p>
+</form>
+
+<p class="muted">
+These are configurable preferences for the prototype. They will not automatically change the calculation logic in every existing module.
+</p>
+</section>
+
+<section class="panel">
+<h2>3. Room Categories</h2>
+<p class="muted">Manage the categories configured for your hotel. Existing rooms will not be changed automatically.</p>
+
+<div id="categoryList"></div>
+
+<div class="form-grid">
+<div>
+<label for="newCategory">Add a Room Category</label>
+<input id="newCategory" maxlength="50" placeholder="e.g. Executive">
+</div>
+</div>
+
+<div class="actions">
+<button class="success" type="button" id="addCategory">Add Category</button>
+<button class="primary" type="button" id="saveCategories">Save Categories</button>
+</div>
+
+<p id="categoryMessage" class="status"></p>
+</section>
+
+<section class="panel">
+<h2>4. Data Backup & Restore</h2>
+
+<div class="warning">
+Backups may contain guest contact details, reservation information, staff records, and payment records. Keep downloaded backup files private. Restoring a backup will replace the matching hotel data stored in this browser.
+</div>
+
+<div class="cards">
+<div class="card">
+<h3>Stored Data Categories</h3>
+<strong id="storageCategories">0</strong>
+</div>
+<div class="card">
+<h3>Stored Records</h3>
+<strong id="storageRecords">0</strong>
+</div>
+<div class="card">
+<h3>Approximate Storage Size</h3>
+<strong id="storageSize">0 KB</strong>
+</div>
+</div>
+
+<div class="actions">
+<button class="primary" type="button" id="backupButton">Download Full Backup</button>
+</div>
+
+<hr>
+
+<label for="backupFile">Select a Previous Backup File (.json)</label>
+<input type="file" id="backupFile" accept=".json,application/json">
+
+<div class="actions">
+<button class="success" type="button" id="restoreButton">Validate & Restore Backup</button>
+</div>
+
+<p id="backupMessage" class="status"></p>
+</section>
+
+<section class="panel">
+<h2>5. System Information</h2>
+
+<div class="cards">
+<div class="card">
+<h3>Application</h3>
+<strong>GrandStay Hotel</strong>
+</div>
+<div class="card">
+<h3>Version</h3>
+<strong>1.0.0</strong>
+</div>
+<div class="card">
+<h3>Storage</h3>
+<strong>Browser LocalStorage</strong>
+</div>
+</div>
+
+<p class="muted">
+This GitHub Pages prototype stores data in the current browser. It does not yet provide a shared database, secure staff accounts, or server-side access controls.
+</p>
+</section>
+
+  </main>
+  
+  <script>
+const PROFILE_KEY = "hotelProfile";
+const PREFERENCES_KEY = "hotelPreferences";
+const CATEGORIES_KEY = "hotelRoomCategories";
+
+const BACKUP_KEYS = [
+  "hotelRooms",
+  "hotelGuests",
+  "hotelReservations",
+  "hotelPayments",
+  "hotelStaff",
+  "hotelSalaryPayments",
+  "hotelHousekeepingTasks",
+  "hotelProfile",
+  "hotelPreferences",
+  "hotelRoomCategories"
+];
+
+const DEFAULT_PROFILE = {
+  name: "GrandStay Hotel",
+  phone: "",
+  email: "",
+  website: "",
+  address: "",
+  logo: ""
+};
+
+const DEFAULT_PREFERENCES = {
+  currency: "NGN",
+  taxRate: 0,
+  checkInTime: "14:00",
+  checkOutTime: "12:00",
+  bookingAdvance: 365,
+  cancellationHours: 24
+};
+
+const DEFAULT_CATEGORIES = ["Standard", "Deluxe", "Suite"];
+
+let profile = {};
+let preferences = {};
+let categories = [];
+
+function readObject(key,defaults){
+  try{
+    const value = JSON.parse(localStorage.getItem(key) || "null");
+
+    if(value && typeof value === "object" && !Array.isArray(value)){
+      return {...defaults,...value};
+    }
+  }catch(error){}
+
+  return {...defaults};
+}
+
+function readCategories(){
+  try{
+    const value = JSON.parse(localStorage.getItem(CATEGORIES_KEY) || "null");
+
+    if(Array.isArray(value)){
+      return value.filter(item =>
+        typeof item === "string" && item.trim()
+      );
+    }
+  }catch(error){}
+
+  return [...DEFAULT_CATEGORIES];
+}
+
+function loadSettings(){
+  profile = readObject(PROFILE_KEY,DEFAULT_PROFILE);
+  preferences = readObject(PREFERENCES_KEY,DEFAULT_PREFERENCES);
+  categories = readCategories();
+
+  populateProfile();
+  populatePreferences();
+  renderCategories();
+  updateStorageStats();
+}
+
+function populateProfile(){
+  document.getElementById("hotelName").value = profile.name || "";
+  document.getElementById("hotelPhone").value = profile.phone || "";
+  document.getElementById("hotelEmail").value = profile.email || "";
+  document.getElementById("hotelWebsite").value = profile.website || "";
+  document.getElementById("hotelAddress").value = profile.address || "";
+  document.getElementById("hotelLogo").value = profile.logo || "";
+
+  document.getElementById("headerHotelName").textContent =
+    profile.name || "GrandStay Hotel";
+}
+
+function populatePreferences(){
+  document.getElementById("currency").value = preferences.currency || "NGN";
+  document.getElementById("taxRate").value = preferences.taxRate ?? 0;
+  document.getElementById("checkInTime").value =
+    preferences.checkInTime || "14:00";
+  document.getElementById("checkOutTime").value =
+    preferences.checkOutTime || "12:00";
+  document.getElementById("bookingAdvance").value =
+    preferences.bookingAdvance ?? 365;
+  document.getElementById("cancellationHours").value =
+    preferences.cancellationHours ?? 24;
+}
+
+function showMessage(id,message,isError=false){
+  const element = document.getElementById(id);
+  element.textContent = message;
+  element.className = "status " + (isError ? "bad" : "good");
+}
+
+document.getElementById("profileForm").addEventListener("submit",function(event){
+  event.preventDefault();
+
+  const website = document.getElementById("hotelWebsite").value.trim();
+
+  if(website){
+    try{
+      const url = new URL(website);
+      if(!["http:","https:"].includes(url.protocol)){
+        throw new Error("Invalid protocol");
+      }
+    }catch(error){
+      showMessage("profileMessage","Enter a valid website address beginning with https:// or http://.",true);
+      return;
+    }
+  }
+
+  profile = {
+    name: document.getElementById("hotelName").value.trim(),
+    phone: document.getElementById("hotelPhone").value.trim(),
+    email: document.getElementById("hotelEmail").value.trim(),
+    website: website,
+    address: document.getElementById("hotelAddress").value.trim(),
+    logo: document.getElementById("hotelLogo").value.trim()
+  };
+
+  localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));
+
+  document.getElementById("headerHotelName").textContent = profile.name;
+  showMessage("profileMessage","Hotel profile saved successfully.");
+  updateStorageStats();
+});
+
+document.getElementById("resetProfile").addEventListener("click",function(){
+  populateProfile();
+  showMessage("profileMessage","Unsaved changes were discarded.");
+});
+
+document.getElementById("preferencesForm").addEventListener("submit",function(event){
+  event.preventDefault();
+
+  const taxRate = Number(document.getElementById("taxRate").value);
+  const advance = Number(document.getElementById("bookingAdvance").value);
+  const cancellation = Number(document.getElementById("cancellationHours").value);
+
+  if(!Number.isFinite(taxRate) || taxRate<0 || taxRate>100){
+    showMessage("preferencesMessage","Tax rate must be between 0 and 100.",true);
+    return;
+  }
+
+  if(!Number.isInteger(advance) || advance<1 || advance>1095){
+    showMessage("preferencesMessage","Booking advance must be from 1 to 1095 days.",true);
+    return;
+  }
+
+  if(!Number.isInteger(cancellation) || cancellation<0 || cancellation>720){
+    showMessage("preferencesMessage","Cancellation notice must be between 0 and 720 hours.",true);
+    return;
+  }
+
+  preferences = {
+    currency: document.getElementById("currency").value,
+    taxRate: taxRate,
+    checkInTime: document.getElementById("checkInTime").value,
+    checkOutTime: document.getElementById("checkOutTime").value,
+    bookingAdvance: advance,
+    cancellationHours: cancellation
+  };
+
+  localStorage.setItem(PREFERENCES_KEY,JSON.stringify(preferences));
+
+  showMessage("preferencesMessage","Hotel preferences saved successfully.");
+  updateStorageStats();
+});
+
+document.getElementById("resetPreferences").addEventListener("click",function(){
+  populatePreferences();
+  showMessage("preferencesMessage","Unsaved changes were discarded.");
+});
+
+function renderCategories(){
+  const container = document.getElementById("categoryList");
+
+  if(!categories.length){
+    container.innerHTML = '<p class="muted">No room categories configured.</p>';
+    return;
+  }
+
+  container.innerHTML = categories.map((category,index)=>`
+    <div class="category-row">
+      <input aria-label="Room category ${index+1}" maxlength="50"
+        value="${escapeHTML(category)}"
+        data-category-index="${index}">
+      <button type="button" class="danger"
+        onclick="removeCategory(${index})">Remove</button>
+    </div>
+  `).join("");
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,function(char){
+    return {
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[char];
+  });
+}
+
+document.getElementById("addCategory").addEventListener("click",function(){
+  const input = document.getElementById("newCategory");
+  const name = input.value.trim();
+
+  if(!name){
+    showMessage("categoryMessage","Enter a room category name.",true);
+    return;
+  }
+
+  if(categories.some(c=>c.toLowerCase()===name.toLowerCase())){
+    showMessage("categoryMessage","That category already exists.",true);
+    return;
+  }
+
+  if(categories.length>=30){
+    showMessage("categoryMessage","You can configure up to 30 categories.",true);
+    return;
+  }
+
+  categories.push(name);
+  input.value = "";
+  renderCategories();
+  showMessage("categoryMessage","Category added. Tap Save Categories to store changes.");
+});
+
+function removeCategory(index){
+  if(!confirm("Remove this category from the settings list? Existing rooms will not be changed.")){
+    return;
+  }
+
+  categories.splice(index,1);
+  renderCategories();
+  showMessage("categoryMessage","Category removed from the current list. Save to apply.");
+}
+
+document.getElementById("saveCategories").addEventListener("click",function(){
+  const inputs = document.querySelectorAll("[data-category-index]");
+  const updated = Array.from(inputs).map(input=>input.value.trim());
+
+  if(updated.some(name=>!name)){
+    showMessage("categoryMessage","Room category names cannot be empty.",true);
+    return;
+  }
+
+  const unique = updated.map(name=>name.toLowerCase());
+
+  if(new Set(unique).size!==unique.length){
+    showMessage("categoryMessage","Duplicate room categories are not allowed.",true);
+    return;
+  }
+
+  categories = updated;
+  localStorage.setItem(CATEGORIES_KEY,JSON.stringify(categories));
+
+  renderCategories();
+  showMessage("categoryMessage","Room categories saved successfully.");
+  updateStorageStats();
+});
+
+function updateStorageStats(){
+  let count = 0;
+  let bytes = 0;
+  let categoriesCount = 0;
+
+  BACKUP_KEYS.forEach(key=>{
+    const value = localStorage.getItem(key);
+
+    if(value!==null){
+      categoriesCount++;
+      bytes += new Blob([value]).size;
+
+      try{
+        const parsed = JSON.parse(value);
+
+        if(Array.isArray(parsed)){
+          count += parsed.length;
+        }else if(parsed && typeof parsed==="object"){
+          count++;
+        }
+      }catch(error){
+        count++;
+      }
+    }
+  });
+
+  document.getElementById("storageCategories").textContent = categoriesCount;
+  document.getElementById("storageRecords").textContent = count;
+
+  const kb = bytes/1024;
+  document.getElementById("storageSize").textContent =
+    kb<1 ? Math.round(bytes)+" bytes" : kb.toFixed(2)+" KB";
+}
+
+function downloadJSON(data,filename){
+  const blob = new Blob(
+    [JSON.stringify(data,null,2)],
+    {type:"application/json"}
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+document.getElementById("backupButton").addEventListener("click",function(){
+  const backup = {
+    application: "GrandStay Hotel Management System",
+    formatVersion: 1,
+    createdAt: new Date().toISOString(),
+    data: {}
+  };
+
+  BACKUP_KEYS.forEach(key=>{
+    const value = localStorage.getItem(key);
+
+    if(value!==null){
+      try{
+        backup.data[key] = JSON.parse(value);
+      }catch(error){
+        backup.data[key] = value;
+      }
+    }
+  });
+
+  const date = new Date().toISOString().slice(0,10);
+  downloadJSON(backup,"GrandStay_Backup_"+date+".json");
+
+  showMessage("backupMessage","Backup file generated. Keep it in a safe location.");
+});
+
+function validateBackup(backup){
+  if(!backup || typeof backup!=="object" || Array.isArray(backup)){
+    throw new Error("The file does not contain a valid backup object.");
+  }
+
+  if(backup.application!=="GrandStay Hotel Management System"){
+    throw new Error("This file is not a recognized GrandStay backup.");
+  }
+
+  if(!backup.data || typeof backup.data!=="object" || Array.isArray(backup.data)){
+    throw new Error("Backup data is missing or invalid.");
+  }
+
+  const validated = {};
+
+  BACKUP_KEYS.forEach(key=>{
+    if(!Object.prototype.hasOwnProperty.call(backup.data,key)){
+      return;
+    }
+
+    const value = backup.data[key];
+
+    if(key==="hotelProfile" || key==="hotelPreferences"){
+      if(!value || typeof value!=="object" || Array.isArray(value)){
+        throw new Error("Invalid data format for "+key+".");
+      }
+    }else{
+      if(!Array.isArray(value)){
+        throw new Error("Invalid list format for "+key+".");
+      }
+    }
+
+    validated[key] = value;
+  });
+
+  if(!Object.keys(validated).length){
+    throw new Error("No recognized hotel records were found in this backup.");
+  }
+
+  return validated;
+}
+
+document.getElementById("restoreButton").addEventListener("click",async function(){
+  const fileInput = document.getElementById("backupFile");
+  const file = fileInput.files[0];
+
+  if(!file){
+    showMessage("backupMessage","Select a JSON backup file first.",true);
+    return;
+  }
+
+  if(file.size>10*1024*1024){
+    showMessage("backupMessage","The backup file exceeds the 10 MB limit.",true);
+    return;
+  }
+
+  try{
+    const text = await file.text();
+    const backup = JSON.parse(text);
+    const validated = validateBackup(backup);
+
+    const confirmed = confirm(
+      "Restoring this backup will replace matching records in this browser. " +
+      "Make a backup of your current data first. Continue?"
+    );
+
+    if(!confirmed) return;
+
+    const previousValues = {};
+
+    BACKUP_KEYS.forEach(key=>{
+      previousValues[key] = localStorage.getItem(key);
+    });
+
+    try{
+      Object.keys(validated).forEach(key=>{
+        localStorage.setItem(key,JSON.stringify(validated[key]));
+      });
+    }catch(storageError){
+      BACKUP_KEYS.forEach(key=>{
+        try{
+          if(previousValues[key]===null){
+            localStorage.removeItem(key);
+          }else{
+            localStorage.setItem(key,previousValues[key]);
+          }
+        }catch(rollbackError){}
+      });
+
+      throw new Error("Restore failed because browser storage may be full. Previous data was restored where possible.");
+    }
+
+    loadSettings();
+    showMessage("backupMessage","Backup restored successfully. Refresh other open hotel pages to load restored data.");
+  }catch(error){
+    showMessage("backupMessage","Restore failed: "+error.message,true);
+  }
+});
+
+loadSettings();
+</script>
+</body>
+  </html>
