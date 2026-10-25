@@ -289,7 +289,7 @@ footer {
         loginButton.disabled = true;
 
         setTimeout(function () {
-          window.location.replace("./index.html");
+          window.location.href = "admin-dashboard.html";
         }, 700);
 
       } catch (error) {
@@ -315,7 +315,7 @@ footer {
 const existingSession = getSession();
 
 if (existingSession) {
-  window.location.replace("./index.html");
+  window.location.replace("./admin-dashboard.html");
 }
 
 })();
