@@ -3,649 +3,593 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hotel Management System</title>
+
+<title>GrandStay Hotel | Comfort, Luxury & Hospitality</title>
+
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 :root {
-    --primary: #173b57;
-    --secondary: #247ba0;
-    --background: #f3f6fa;
+    --navy: #122b40;
+    --gold: #c7a45c;
+    --cream: #f8f5ef;
     --white: #ffffff;
     --text: #263445;
-    --muted: #758397;
-    --green: #16865c;
-    --orange: #e99526;
-    --red: #d94b4b;
 }
+
 body {
     font-family: Arial, sans-serif;
-    background: var(--background);
     color: var(--text);
-}
-.layout {
-    display: flex;
-    min-height: 100vh;
-}
-.sidebar {
-    width: 245px;
-    background: var(--primary);
-    color: white;
-    padding: 25px 15px;
-    flex-shrink: 0;
-}
-.logo {
-    font-size: 21px;
-    font-weight: bold;
-    margin: 0 8px 8px;
-}
-.logo span {
-    color: #69d2c1;
-}
-.tagline {
-    color: #bdcbd8;
-    font-size: 12px;
-    margin: 0 8px 30px;
-}
-.nav-title {
-    font-size: 11px;
-    color: #a8bac9;
-    margin: 22px 10px 10px;
-    text-transform: uppercase;
-}
-.nav-link {
-    display: block;
-    color: #e1eaf1;
-    text-decoration: none;
-    padding: 13px 12px;
-    margin-bottom: 5px;
-    border-radius: 7px;
-    font-size: 14px;
-}
-.nav-link:hover,
-.nav-link.active {
-    background: var(--secondary);
-    color: white;
-}
-.main {
-    flex: 1;
-    min-width: 0;
-    padding: 25px;
-}
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 28px;
-}
-.topbar h1 {
-    font-size: 25px;
-}
-.topbar p {
-    color: var(--muted);
-    margin-top: 7px;
-    font-size: 13px;
-}
-.admin {
-    background: white;
-    padding: 12px 16px;
-    border-radius: 9px;
-    font-size: 13px;
-    box-shadow: 0 2px 8px #00000008;
-}
-.welcome {
-    background: linear-gradient(120deg, #173b57, #247ba0);
-    color: white;
-    padding: 25px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-}
-.welcome h2 {
-    margin-bottom: 10px;
-    font-size: 22px;
-}
-.welcome p {
-    color: #e1edf4;
-    font-size: 14px;
     line-height: 1.6;
+    background: var(--white);
 }
-.section-heading {
-    font-size: 18px;
-    margin-bottom: 17px;
+
+a {
+    text-decoration: none;
 }
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-    margin-bottom: 28px;
+
+.container {
+    width: min(1150px, 92%);
+    margin: auto;
 }
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 11px;
-    box-shadow: 0 3px 12px #16334d08;
+
+/* HEADER */
+
+header {
+    background: var(--navy);
+    color: white;
 }
-.card-label {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 13px;
-}
-.card-value {
-    font-size: 29px;
-    font-weight: bold;
-    margin-bottom: 9px;
-}
-.card-note {
-    font-size: 12px;
-    color: var(--green);
-}
-.card-icon {
-    font-size: 24px;
-    margin-bottom: 12px;
-}
-.content-grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
+
+.navbar {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 20px;
 }
-.panel {
-    background: white;
-    border-radius: 11px;
-    padding: 22px;
-    margin-bottom: 22px;
-    min-width: 0;
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
 }
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
+
+.logo span {
+    color: var(--gold);
 }
-.panel-header h3 {
-    font-size: 17px;
-}
-.view-all {
-    color: var(--secondary);
-    text-decoration: none;
-    font-size: 12px;
-}
-.table-wrap {
-    overflow-x: auto;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 460px;
-}
-th, td {
-    padding: 14px 10px;
-    text-align: left;
-    border-bottom: 1px solid #edf0f4;
-    font-size: 12px;
-}
-th {
-    color: var(--muted);
-    font-weight: normal;
-    background: #f8fafc;
-}
-.status {
-    padding: 6px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    white-space: nowrap;
-}
-.confirmed {
-    background: #e2f6eb;
-    color: #16865c;
-}
-.pending {
-    background: #fff1d9;
-    color: #9c650e;
-}
-.checked-in {
-    background: #e4efff;
-    color: #2863a5;
-}
-.room-item {
+
+.nav-links {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 22px;
+    gap: 24px;
 }
-.room-icon {
-    width: 43px;
-    height: 43px;
-    display: grid;
-    place-items: center;
-    border-radius: 9px;
-    background: #e9f2fa;
-    font-size: 21px;
-    flex-shrink: 0;
+
+.nav-links a {
+    color: white;
+    font-size: 14px;
 }
-.room-info {
-    flex: 1;
+
+.nav-links a:hover {
+    color: var(--gold);
 }
-.room-info h4 {
-    font-size: 13px;
-    margin-bottom: 6px;
+
+.admin-link {
+    border: 1px solid var(--gold);
+    padding: 9px 14px;
+    border-radius: 5px;
 }
-.room-info p {
-    color: var(--muted);
-    font-size: 11px;
+
+/* HERO */
+
+.hero {
+    min-height: 530px;
+    display: flex;
+    align-items: center;
+    color: white;
+    background:
+      linear-gradient(90deg, rgba(10,28,43,.91),
+      rgba(10,28,43,.35)),
+      url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=85")
+      center/cover no-repeat;
 }
-.room-count {
+
+.hero-content {
+    max-width: 700px;
+    padding: 75px 0;
+}
+
+.eyebrow {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
     font-size: 13px;
     font-weight: bold;
 }
-.progress {
-    height: 7px;
-    background: #e9edf2;
-    border-radius: 10px;
-    margin-top: 9px;
-    overflow: hidden;
+
+.hero h1 {
+    font-size: clamp(38px, 6vw, 65px);
+    line-height: 1.15;
+    margin: 20px 0;
 }
-.progress-bar {
-    height: 100%;
-    border-radius: 10px;
-    background: var(--secondary);
+
+.hero p {
+    font-size: 17px;
+    max-width: 570px;
+    color: #f0f2f4;
+    margin-bottom: 30px;
 }
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 8px;
-}
+
 .btn {
     display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    padding: 14px 24px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
     border: none;
-    background: var(--secondary);
-    color: white;
-    padding: 12px 17px;
-    border-radius: 7px;
-    text-decoration: none;
-    font-size: 13px;
     cursor: pointer;
 }
-.btn-light {
-    background: #e9f2fa;
-    color: var(--primary);
+
+.btn:hover {
+    background: #dfbf7c;
 }
-.footer {
-    color: var(--muted);
-    font-size: 12px;
+
+.btn-outline {
+    display: inline-block;
+    border: 1px solid white;
+    color: white;
+    padding: 13px 22px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+/* INTRODUCTION */
+
+.intro {
+    padding: 75px 0;
     text-align: center;
-    padding: 18px 0;
+    background: var(--cream);
 }
-@media(max-width: 1050px) {
-    .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+.section-label {
+    color: #98783a;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.intro h2,
+.section-title {
+    font-size: clamp(27px, 4vw, 38px);
+    color: var(--navy);
+    margin: 12px 0 18px;
+}
+
+.intro p {
+    max-width: 760px;
+    margin: auto;
+    color: #647181;
+    font-size: 15px;
+}
+
+/* ROOMS */
+
+.rooms {
+    padding: 75px 0;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.room-card {
+    background: white;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px #00000008;
+}
+
+.room-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.room-content {
+    padding: 22px;
+}
+
+.room-content h3 {
+    color: var(--navy);
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+.room-content p {
+    color: #687586;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.room-content a {
+    color: #98783a;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* FEATURES */
+
+.features {
+    background: var(--navy);
+    color: white;
+    padding: 65px 0;
+}
+
+.features .section-title {
+    color: white;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+    margin-top: 35px;
+}
+
+.feature {
+    padding: 22px;
+    border: 1px solid #ffffff20;
+    border-radius: 7px;
+}
+
+.feature-icon {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.feature h3 {
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.feature p {
+    font-size: 14px;
+    color: #d5dee5;
+}
+
+/* RESERVATION BANNER */
+
+.booking-banner {
+    padding: 65px 0;
+    text-align: center;
+    background: var(--cream);
+}
+
+.booking-banner p {
+    max-width: 650px;
+    margin: 0 auto 25px;
+    color: #687586;
+}
+
+/* FOOTER */
+
+footer {
+    background: #0b1c2a;
+    color: #d1d9df;
+    padding: 35px 0 20px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 30px;
+    padding-bottom: 25px;
+}
+
+footer h3 {
+    color: white;
+    margin-bottom: 12px;
+}
+
+footer p,
+footer a {
+    font-size: 13px;
+    color: #d1d9df;
+}
+
+footer a {
+    display: block;
+    margin-bottom: 7px;
+}
+
+.copyright {
+    border-top: 1px solid #ffffff20;
+    padding-top: 18px;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* MOBILE */
+
+@media(max-width: 760px) {
+    .navbar {
+        padding: 16px 0;
+        align-items: flex-start;
+        flex-direction: column;
     }
-    .content-grid {
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 12px 18px;
+    }
+
+    .hero {
+        min-height: 470px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .btn-outline {
+        margin: 12px 0 0;
+    }
+
+    .room-grid,
+    .feature-grid,
+    .footer-grid {
         grid-template-columns: 1fr;
     }
-}
-@media(max-width: 650px) {
-    .layout {
-        display: block;
-    }
-    .sidebar {
-        width: 100%;
-        padding: 18px 12px;
-    }
-    .logo {
-        margin-bottom: 5px;
-    }
-    .tagline {
-        margin-bottom: 15px;
-    }
-    .nav-title {
-        margin-top: 14px;
-    }
-    .nav-link {
-        display: inline-block;
-        padding: 10px;
-        margin: 2px;
-        font-size: 12px;
-    }
-    .main {
-        padding: 16px 12px;
-    }
-    .topbar {
-        align-items: flex-start;
-    }
-    .topbar h1 {
-        font-size: 21px;
-    }
-    .admin {
-        padding: 9px;
-        font-size: 11px;
-    }
-    .welcome {
-        padding: 20px;
-    }
-    .welcome h2 {
-        font-size: 19px;
-    }
-    .stats {
-        gap: 10px;
-    }
-    .card {
-        padding: 15px;
-    }
-    .card-value {
-        font-size: 24px;
-    }
-    .panel {
-        padding: 15px;
+
+    .room-card img {
+        height: 230px;
     }
 }
 </style>
 </head>
+
 <body>
 
-<div class="layout">
+<header>
+    <div class="container navbar">
 
-<aside class="sidebar">
-    <div class="logo">GRAND<span>STAY</span></div>
-    <div class="tagline">Hotel Management System</div>
+        <a href="index.html" class="logo">
+            GRAND<span>STAY</span>
+        </a>
 
-    <div class="nav-title">Main Menu</div>
-    <a href="index.html" class="nav-link active">🏠 Dashboard</a>
-    <a href="rooms.html" class="nav-link">🛏️ Room Management</a>
-    <a href="guests.html" class="nav-link">👥 Guest Management</a>
-    <a href="reservations.html" class="nav-link">📅 Reservations</a>
-    <a href="payments.html" class="nav-link">💳 Payments</a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#accommodation">Accommodation</a>
+            <a href="#amenities">Amenities</a>
+            <a href="booking.html">Reservations</a>
+            <a href="#contact">Contact</a>
+            <a href="admin-login.html" class="admin-link">
+                Admin Login
+            </a>
+        </nav>
 
-    <div class="nav-title">Hotel Operations</div>
-    <a href="staff.html" class="nav-link">🧑‍💼 Staff Management</a>
-    <a href="housekeeping.html" class="nav-link">🧹 Housekeeping</a>
-    <a href="reports.html" class="nav-link">📊 Reports</a>
+    </div>
+</header>
 
-    <div class="nav-title">System</div>
-    <a href="settings.html" class="nav-link">⚙️ Settings</a>
-    <a href="admin-login.html" class="nav-link">🔐 Admin Login</a>
-</aside>
+<main>
 
-<main class="main">
+<section class="hero">
+    <div class="container hero-content">
 
-    <header class="topbar">
-        <div>
-            <h1>Dashboard</h1>
-            <p>Overview of your hotel's daily operations.</p>
-        </div>
-        <div class="admin">👤 Administrator</div>
-    </header>
+        <div class="eyebrow">Welcome to GrandStay Hotel</div>
 
-    <section class="welcome">
-        <h2>Welcome to GrandStay Hotel!</h2>
-        <p>Manage your rooms, guests, reservations, and payments
-        from one convenient dashboard.</p>
-    </section>
+        <h1>Experience Comfort.<br>Discover Excellence.</h1>
 
-    <h2 class="section-heading">Hotel Overview</h2>
+        <p>
+            Enjoy exceptional hospitality, comfortable accommodation,
+            and memorable experiences at GrandStay Hotel.
+            Your comfort is our priority.
+        </p>
 
-    <section class="stats">
-        <div class="card">
-            <div class="card-icon">🛏️</div>
-            <div class="card-label">Total Rooms</div>
-            <div class="card-value" id="totalRooms">120</div>
-            <div class="card-note">Hotel room inventory</div>
-        </div>
+        <a href="booking.html" class="btn">
+            MAKE A RESERVATION
+        </a>
 
-        <div class="card">
-            <div class="card-icon">👥</div>
-            <div class="card-label">Registered Guests</div>
-            <div class="card-value" id="totalGuests">0</div>
-            <div class="card-note">Guest records</div>
-        </div>
+        <a href="#accommodation" class="btn-outline">
+            EXPLORE OUR ROOMS
+        </a>
 
-        <div class="card">
-            <div class="card-icon">📅</div>
-            <div class="card-label">Reservations</div>
-            <div class="card-value" id="totalBookings">0</div>
-            <div class="card-note">Total booking records</div>
-        </div>
+    </div>
+</section>
 
-        <div class="card">
-            <div class="card-icon">💰</div>
-            <div class="card-label">Revenue</div>
-            <div class="card-value" id="totalRevenue">₦0</div>
-            <div class="card-note">Recorded payments</div>
-        </div>
-    </section>
+<section class="intro">
+    <div class="container">
 
-    <section class="content-grid">
+        <div class="section-label">Your comfort matters</div>
 
-        <div class="panel">
-            <div class="panel-header">
-                <h3>Recent Reservations</h3>
-                <a href="reservations.html" class="view-all">View All</a>
-            </div>
+        <h2>A Better Hotel Experience</h2>
 
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Guest</th>
-                            <th>Room</th>
-                            <th>Check-in</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="reservationTable">
-                        <tr>
-                            <td colspan="4">No reservations yet.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <p>
+            GrandStay Hotel combines welcoming hospitality,
+            relaxing accommodation, and attentive service.
+            Whether you are visiting for business, leisure,
+            or a special occasion, we aim to make every stay
+            comfortable and memorable.
+        </p>
+
+    </div>
+</section>
+
+<section class="rooms" id="accommodation">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="section-label">Accommodation</div>
+            <h2 class="section-title">Discover Our Rooms</h2>
+            <p>Choose the accommodation that suits your stay.</p>
         </div>
 
-        <div class="panel">
-            <div class="panel-header">
-                <h3>Room Occupancy</h3>
-                <span class="view-all">Live Summary</span>
-            </div>
+        <div class="room-grid">
 
-            <div class="room-item">
-                <div class="room-icon">🛌</div>
-                <div class="room-info">
-                    <h4>Standard Rooms</h4>
-                    <p id="standardText">Occupancy overview</p>
-                    <div class="progress">
-                        <div class="progress-bar" id="standardBar"
-                        style="width: 0%"></div>
-                    </div>
+            <article class="room-card">
+                <img
+                    src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=900&q=80"
+                    alt="Comfortable standard hotel room">
+
+                <div class="room-content">
+                    <h3>Standard Room</h3>
+                    <p>
+                        A welcoming and comfortable space for
+                        guests seeking a relaxing stay.
+                    </p>
+                    <a href="booking.html">RESERVE THIS ROOM →</a>
                 </div>
-                <div class="room-count" id="standardCount">0/60</div>
-            </div>
+            </article>
 
-            <div class="room-item">
-                <div class="room-icon">🛋️</div>
-                <div class="room-info">
-                    <h4>Deluxe Rooms</h4>
-                    <p id="deluxeText">Occupancy overview</p>
-                    <div class="progress">
-                        <div class="progress-bar" id="deluxeBar"
-                        style="width: 0%"></div>
-                    </div>
+            <article class="room-card">
+                <img
+                    src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80"
+                    alt="Elegant deluxe hotel room">
+
+                <div class="room-content">
+                    <h3>Deluxe Room</h3>
+                    <p>
+                        Enjoy additional space and a refined
+                        atmosphere for your visit.
+                    </p>
+                    <a href="booking.html">RESERVE THIS ROOM →</a>
                 </div>
-                <div class="room-count" id="deluxeCount">0/40</div>
-            </div>
+            </article>
 
-            <div class="room-item">
-                <div class="room-icon">👑</div>
-                <div class="room-info">
-                    <h4>Suite Rooms</h4>
-                    <p id="suiteText">Occupancy overview</p>
-                    <div class="progress">
-                        <div class="progress-bar" id="suiteBar"
-                        style="width: 0%"></div>
-                    </div>
+            <article class="room-card">
+                <img
+                    src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80"
+                    alt="Luxury hotel suite">
+
+                <div class="room-content">
+                    <h3>Executive Suite</h3>
+                    <p>
+                        A spacious accommodation option for
+                        guests who appreciate extra comfort.
+                    </p>
+                    <a href="booking.html">RESERVE THIS ROOM →</a>
                 </div>
-                <div class="room-count" id="suiteCount">0/20</div>
-            </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="features" id="amenities">
+    <div class="container">
+
+        <div class="section-heading">
+            <div class="section-label">Our hospitality</div>
+            <h2 class="section-title">Designed Around Your Comfort</h2>
         </div>
 
-    </section>
+        <div class="feature-grid">
 
-    <section class="panel">
-        <div class="panel-header">
-            <h3>Quick Actions</h3>
-        </div>
-        <div class="actions">
-            <a href="rooms.html" class="btn">+ Manage Rooms</a>
-            <a href="guests.html" class="btn btn-light">+ Register Guest</a>
-            <a href="reservations.html" class="btn btn-light">+ New Reservation</a>
-            <a href="payments.html" class="btn btn-light">View Payments</a>
-        </div>
-    </section>
+            <article class="feature">
+                <div class="feature-icon">🛏️</div>
+                <h3>Comfortable Accommodation</h3>
+                <p>
+                    Relax in welcoming rooms designed to make
+                    your stay enjoyable.
+                </p>
+            </article>
 
-    <footer class="footer">
-        GrandStay Hotel Management System &copy; 2026
-        <br><br>
-        Dashboard prototype. Figures update from saved browser records.
-    </footer>
+            <article class="feature">
+                <div class="feature-icon">🤝</div>
+                <h3>Friendly Service</h3>
+                <p>
+                    Our goal is to provide attentive service
+                    throughout your visit.
+                </p>
+            </article>
+
+            <article class="feature">
+                <div class="feature-icon">📅</div>
+                <h3>Convenient Reservations</h3>
+                <p>
+                    Submit your booking request through our
+                    online reservation page.
+                </p>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="booking-banner">
+    <div class="container">
+
+        <div class="section-label">Plan your visit</div>
+
+        <h2 class="section-title">Your Stay Begins Here</h2>
+
+        <p>
+            Ready to plan your visit? Start your reservation
+            and provide your preferred dates and accommodation
+            details.
+        </p>
+
+        <a href="booking.html" class="btn">
+            BOOK YOUR STAY
+        </a>
+
+    </div>
+</section>
 
 </main>
-</div>
 
-<script>
-function getRecords(key) {
-    try {
-        const data = JSON.parse(localStorage.getItem(key) || "[]");
-        return Array.isArray(data) ? data : [];
-    } catch (error) {
-        return [];
-    }
-}
+<footer id="contact">
+    <div class="container">
 
-function updateDashboard() {
-    const rooms = getRecords("hotelRooms");
-    const guests = getRecords("hotelGuests");
-    const bookings = getRecords("hotelReservations");
-    const payments = getRecords("hotelPayments");
+        <div class="footer-grid">
 
-    const totalRooms = rooms.length || 120;
+            <div>
+                <h3>GRAND<span style="color:#c7a45c">STAY</span></h3>
+                <p>
+                    Hospitality, comfort, and memorable stays.
+                    We look forward to welcoming you.
+                </p>
+            </div>
 
-    document.getElementById("totalRooms").textContent = totalRooms;
-    document.getElementById("totalGuests").textContent = guests.length;
-    document.getElementById("totalBookings").textContent = bookings.length;
+            <div>
+                <h3>Explore</h3>
+                <a href="index.html">Home</a>
+                <a href="#accommodation">Accommodation</a>
+                <a href="#amenities">Amenities</a>
+                <a href="booking.html">Reservations</a>
+            </div>
 
-    const revenue = payments.reduce((sum, payment) => {
-        return sum + (Number(payment.amount) || 0);
-    }, 0);
+            <div>
+                <h3>Hotel Services</h3>
+                <a href="booking.html">Make a Reservation</a>
+                <a href="admin-login.html">Administrator Login</a>
+            </div>
 
-    document.getElementById("totalRevenue").textContent =
-        "₦" + revenue.toLocaleString("en-NG");
+        </div>
 
-    const table = document.getElementById("reservationTable");
+        <div class="copyright">
+            © 2026 GrandStay Hotel. All rights reserved.
+        </div>
 
-    if (bookings.length === 0) {
-        table.innerHTML =
-            '<tr><td colspan="4">No reservations yet.</td></tr>';
-    } else {
-        table.innerHTML = bookings.slice(-5).reverse().map(booking => {
-            const status = String(booking.status || "Pending");
-            let statusClass = "pending";
+    </div>
+</footer>
 
-            if (status.toLowerCase() === "confirmed") {
-                statusClass = "confirmed";
-            } else if (status.toLowerCase() === "checked-in") {
-                statusClass = "checked-in";
-            }
-
-            const safe = value => String(value || "")
-                .replace(/[&<>"']/g, char => ({
-                    "&": "&amp;",
-                    "<": "&lt;",
-                    ">": "&gt;",
-                    '"': "&quot;",
-                    "'": "&#39;"
-                }[char]));
-
-            return `<tr>
-                <td>${safe(booking.guestName)}</td>
-                <td>${safe(booking.roomNumber)}</td>
-                <td>${safe(booking.checkIn)}</td>
-                <td><span class="status ${statusClass}">
-                    ${safe(status)}</span></td>
-            </tr>`;
-        }).join("");
-    }
-
-    const types = [
-        { key: "standard", total: 60 },
-        { key: "deluxe", total: 40 },
-        { key: "suite", total: 20 }
-    ];
-
-    types.forEach(type => {
-        const matchingRooms = rooms.filter(room =>
-            String(room.type || "").toLowerCase()
-            === type.key
-        );
-
-        const occupied = matchingRooms.filter(room =>
-            String(room.status || "").toLowerCase()
-            === "occupied"
-        ).length;
-
-        const count = matchingRooms.length
-            ? matchingRooms.length : type.total;
-
-        const percent = Math.min(100, Math.round(
-            occupied / count * 100
-        ));
-
-        document.getElementById(type.key + "Count").textContent =
-            occupied + "/" + count;
-
-        document.getElementById(type.key + "Text").textContent =
-            percent + "% occupied";
-
-        document.getElementById(type.key + "Bar").style.width =
-            percent + "%";
-    });
-}
-
-updateDashboard();
-</script>
-<script>
-(function () {
-  "use strict";
-
-  const SESSION_KEY = "grandstayAdminSession";
-  const LOGIN_PAGE = "./admin-login.html";
-
-  let session = null;
-
-  try {
-    session = JSON.parse(
-      sessionStorage.getItem(SESSION_KEY) || "null"
-    );
-  } catch (error) {
-    session = null;
-  }
-
-  const validSession =
-    session !== null &&
-    session.username === "admin" &&
-    typeof session.expiresAt === "number" &&
-    session.expiresAt > Date.now();
-
-  if (!validSession) {
-    sessionStorage.removeItem(SESSION_KEY);
-    window.location.replace(LOGIN_PAGE);
-    return;
-  }
-})();
-</script>
-    
 </body>
 </html>
