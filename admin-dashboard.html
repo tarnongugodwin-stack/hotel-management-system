@@ -618,31 +618,28 @@ updateDashboard();
 </script>
 <script>
 (function () {
-  "use strict";
-
   const SESSION_KEY = "grandstayAdminSession";
-  const LOGIN_PAGE = "./admin-login.html";
-
-  let session = null;
 
   try {
-    session = JSON.parse(
+    const session = JSON.parse(
       sessionStorage.getItem(SESSION_KEY) || "null"
     );
+
+    const valid =
+      session &&
+      session.username === "admin" &&
+      typeof session.expiresAt === "number" &&
+      session.expiresAt > Date.now();
+
+    if (!valid) {
+      sessionStorage.removeItem(SESSION_KEY);
+
+      window.location.replace("./admin-login.html");
+    }
   } catch (error) {
-    session = null;
-  }
-
-  const validSession =
-    session !== null &&
-    session.username === "admin" &&
-    typeof session.expiresAt === "number" &&
-    session.expiresAt > Date.now();
-
-  if (!validSession) {
     sessionStorage.removeItem(SESSION_KEY);
-    window.location.replace(LOGIN_PAGE);
-    return;
+
+    window.location.replace("./admin-login.html");
   }
 })();
 </script>
