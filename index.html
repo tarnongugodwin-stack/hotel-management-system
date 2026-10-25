@@ -616,6 +616,32 @@ function updateDashboard() {
 
 updateDashboard();
 </script>
+<script>
+(function () {
+  const SESSION_KEY = "grandstayAdminSession";
+  const LOGIN_PAGE = "admin-login.html";
 
+  try {
+    const session = JSON.parse(
+      sessionStorage.getItem(SESSION_KEY) || "null"
+    );
+
+    const validSession =
+      session &&
+      typeof session.username === "string" &&
+      Number.isFinite(session.expiresAt) &&
+      session.expiresAt > Date.now();
+
+    if (!validSession) {
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.replace(LOGIN_PAGE);
+    }
+  } catch (error) {
+    sessionStorage.removeItem(SESSION_KEY);
+    window.location.replace(LOGIN_PAGE);
+  }
+})();
+</script>
+    
 </body>
 </html>
