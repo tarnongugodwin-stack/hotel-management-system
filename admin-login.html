@@ -289,7 +289,7 @@ footer {
         loginButton.disabled = true;
 
         setTimeout(function () {
-          window.location.href = "index.html";
+          window.location.replace("./index.html");
         }, 700);
 
       } catch (error) {
@@ -312,9 +312,11 @@ footer {
     }
   });
 
-  if (getSession()) {
-    window.location.replace("index.html");
-  }
+const existingSession = getSession();
+
+if (existingSession) {
+  window.location.replace("./index.html");
+}
 
 })();
 </script></body>
