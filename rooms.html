@@ -513,6 +513,35 @@ th {
     </div>
 
     <div class="table-wrap">
+        <!-- ROOM AVAILABILITY SUMMARY -->
+<div class="room-stats" style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:15px;
+    margin:20px 0;
+">
+
+    <div style="background:#e8eef5;padding:18px;border-radius:10px;">
+        <p>Total Rooms</p>
+        <h2 id="totalRooms">0</h2>
+    </div>
+
+    <div style="background:#e0f4e8;padding:18px;border-radius:10px;">
+        <p>Available Rooms</p>
+        <h2 id="availableRooms">0</h2>
+    </div>
+
+    <div style="background:#fff0d9;padding:18px;border-radius:10px;">
+        <p>Occupied Rooms</p>
+        <h2 id="occupiedRooms">0</h2>
+    </div>
+
+    <div style="background:#fce2e4;padding:18px;border-radius:10px;">
+        <p>Under Maintenance</p>
+        <h2 id="maintenanceRooms">0</h2>
+    </div>
+
+</div>
         <table>
             <thead>
                 <tr>
