@@ -458,6 +458,48 @@ footer {
 
     const form = document.getElementById("bookingForm");
     const roomType = document.getElementById("roomType");
+    const roomAmenities = document.getElementById("roomAmenities");
+
+const ROOM_AMENITIES = {
+    Standard: [
+        "✓ Free Wi-Fi",
+        "✓ Air Conditioning"
+    ],
+    Deluxe: [
+        "✓ Free Wi-Fi",
+        "✓ Air Conditioning",
+        "✓ Restaurant Access"
+    ],
+    Suite: [
+        "✓ Free Wi-Fi",
+        "✓ Air Conditioning",
+        "✓ Restaurant Access",
+        "✓ Gym Access",
+        "✓ Spa Access",
+        "✓ Sauna Access"
+    ]
+};
+
+function updateRoomAmenities() {
+    const selectedRoom = roomType.value;
+    const amenities = ROOM_AMENITIES[selectedRoom] || ROOM_AMENITIES.Standard;
+
+    const heading = document.createElement("p");
+    heading.textContent = selectedRoom + " Room Facilities";
+    heading.style.cssText =
+        "font-weight:bold;color:#122b40;margin-bottom:8px;";
+
+    roomAmenities.replaceChildren(heading);
+
+    amenities.forEach(function (amenity) {
+        const item = document.createElement("p");
+        item.textContent = amenity;
+        roomAmenities.appendChild(item);
+    });
+}
+
+roomType.addEventListener("change", updateRoomAmenities);
+updateRoomAmenities();
     const roomsInput = document.getElementById("rooms");
     const checkIn = document.getElementById("checkIn");
     const checkOut = document.getElementById("checkOut");
