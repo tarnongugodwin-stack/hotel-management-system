@@ -449,11 +449,12 @@ footer {
     const checkOut = document.getElementById("checkOut");
     const message = document.getElementById("message");
 
-    const prices = {
-        Standard: 30000,
-        Deluxe: 50000,
-        Suite: 85000
-    };
+    // GrandStay Hotel fixed room prices per night
+const ROOM_PRICES = Object.freeze({
+    Standard: 30000,
+    Deluxe: 50000,
+    Suite: 85000
+});
 
     const money = amount =>
         "₦" + amount.toLocaleString("en-NG");
@@ -484,7 +485,7 @@ footer {
 
     function updateSummary() {
         const type = roomType.value;
-        const price = prices[type] || prices.Standard;
+        const price = ROOM_PRICES[type] || ROOM_PRICES.Standard;
         const nights = getNights();
         const roomCount = Number(roomsInput.value) || 1;
         const total = Math.max(0, nights) * price * roomCount;
@@ -564,7 +565,10 @@ footer {
 
         const type = roomType.value;
         const roomCount = Number(roomsInput.value) || 1;
-        const total = prices[type] * nights * roomCount;
+        const total =
+    (ROOM_PRICES[type] || ROOM_PRICES.Standard) *
+    nights *
+    roomCount;
 
         const booking = {
             reference: "GS-" + Date.now().toString().slice(-8),
