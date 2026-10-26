@@ -649,7 +649,38 @@ function renderRooms() {
             </td>
         </tr>`;
     }).join("");
+    
+// UPDATE ROOM AVAILABILITY SUMMARY
+function updateRoomStats() {
+    const total = rooms.length;
 
+    let available = 0;
+    let occupied = 0;
+    let maintenance = 0;
+
+    rooms.forEach(function(room) {
+        const status = String(room.status || "Available")
+            .trim()
+            .toLowerCase();
+
+        if (status === "available") {
+            available++;
+        } else if (status === "occupied") {
+            occupied++;
+        } else if (
+            status.includes("maintenance") ||
+            status === "under repair"
+        ) {
+            maintenance++;
+        }
+    });
+
+    document.getElementById("totalRooms").textContent = total;
+    document.getElementById("availableRooms").textContent = available;
+    document.getElementById("occupiedRooms").textContent = occupied;
+    document.getElementById("maintenanceRooms").textContent = maintenance;
+}
+    
     document.getElementById("emptyMessage").hidden =
         filtered.length > 0;
 
