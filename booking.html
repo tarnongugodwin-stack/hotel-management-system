@@ -600,7 +600,7 @@ const ROOM_PRICES = Object.freeze({
         }
     }
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
         if (!form.reportValidity()) {
