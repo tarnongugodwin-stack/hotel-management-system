@@ -1,1 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Reservations | GrandStay Hotel</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --navy: #122b40;
+    --gold: #c7a45c;
+    --cream: #f8f5ef;
+    --text: #263445;
+    --muted: #687586;
+    --border: #dce2e8;
+    --green: #16784a;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fa;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 18px 0;
+}
+
+.container {
+    width: min(1050px, 92%);
+    margin: auto;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.logo {
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.hero {
+    background: linear-gradient(120deg, #173b57, #247ba0);
+    color: white;
+    padding: 45px 0;
+}
+
+.hero h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    margin-bottom: 8px;
+}
+
+.hero p {
+    color: #e1edf4;
+    font-size: 14px;
+}
+
+.page-content {
+    padding: 35px 0 55px;
+}
+
+.booking-layout {
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr;
+    gap: 25px;
+    align-items: start;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 18px #00000008;
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    color: var(--navy);
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: white;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #c7dff5;
+    border-color: #247ba0;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.btn {
+    display: inline-block;
+    width: 100%;
+    border: none;
+    background: var(--gold);
+    color: var(--navy);
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #dfbf7c;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf0f4;
+    font-size: 14px;
+}
+
+.summary-row span:first-child {
+    color: var(--muted);
+}
+
+.summary-row strong {
+    text-align: right;
+}
+
+.total-row {
+    border-bottom: none;
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--navy);
+}
+
+.notice {
+    background: var(--cream);
+    border-radius: 7px;
+    padding: 14px;
+    font-size: 12px;
+    color: #6b5b39;
+    margin-top: 18px;
+}
+
+.message {
+    display: none;
+    padding: 14px;
+    border-radius: 7px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.success {
+    display: block;
+    background: #e0f4e8;
+    color: var(--green);
+}
+
+.error {
+    display: block;
+    background: #fce2e4;
+    color: #a61b29;
+}
+
+footer {
+    background: var(--navy);
+    color: #d1d9df;
+    padding: 25px 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+@media(max-width: 750px) {
+    .booking-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+
+    .card {
+        padding: 19px;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="container navbar">
+
+        <a href="index.html" class="logo">
+            GRAND<span>STAY</span>
+        </a>
+
+        <a href="index.html" class="nav-link">
+            ← Return to Homepage
+        </a>
+
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <h1>Make a Reservation</h1>
+        <p>Plan your stay with GrandStay Hotel.</p>
+    </div>
+</section>
+
+<main class="container page-content">
+
+    <div id="message" class="message" role="status"></div>
+
+    <div class="booking-layout">
+
+        <section class="card">
+
+            <h2>Guest and Booking Details</h2>
+
+            <form id="bookingForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            maxlength="100"
+                            autocomplete="name"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            maxlength="150"
+                            autocomplete="email"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            maxlength="25"
+                            autocomplete="tel"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guests">Number of Guests *</label>
+                        <select id="guests" required>
+                            <option value="1">1 Guest</option>
+                            <option value="2" selected>2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5 Guests</option>
+                            <option value="6">6 Guests</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="roomType">Room Type *</label>
+                        <select id="roomType" required>
+                            <option value="Standard">
+                                Standard Room
+                            </option>
+
+                            <option value="Deluxe">
+                                Deluxe Room
+                            </option>
+
+                            <option value="Suite">
+                                Executive Suite
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+
+                        <label>Room Amenities</label>
+
+                        <div id="roomAmenities"
+                             style="background:#f8f5ef;padding:15px;border-radius:8px;">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rooms">Number of Rooms *</label>
+                        <select id="rooms" required>
+                            <option value="1">1 Room</option>
+                            <option value="2">2 Rooms</option>
+                            <option value="3">3 Rooms</option>
+                            <option value="4">4 Rooms</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkIn">Check-in Date *</label>
+                        <input type="date" id="checkIn" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkOut">Check-out Date *</label>
+                        <input type="date" id="checkOut" required>
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="requests">Special Requests</label>
+
+                        <textarea
+                            id="requests"
+                            maxlength="1000"
+                            placeholder="Any additional information for your stay?"></textarea>
+                    </div>
+
+                    <div class="form-group full">
+                        <label for="paymentMethod">
+                            Preferred Payment Method *
+                        </label>
+
+                        <select id="paymentMethod" required>
+                            <option value="Pay at Hotel">
+                                Pay at Hotel
+                            </option>
+
+                            <option value="Bank Transfer">
+                                Bank Transfer
+                            </option>
+
+                            <option value="Online Payment">
+                                Online Payment
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="btn"
+                        id="submitButton">
+
+                    Submit Reservation Request
+
+                </button>
+
+                <div class="notice">
+                    Your reservation request will be submitted
+                    to GrandStay Hotel for review. Submission
+                    does not guarantee room availability or
+                    confirm your booking. No payment will be
+                    taken through this form.
+                </div>
+
+            </form>
+
+        </section>
+
+        <aside>
+
+            <section class="card">
+
+                <h2>Reservation Summary</h2>
+
+                <div class="summary-row">
+                    <span>Room Type</span>
+                    <strong id="summaryRoom">Standard Room</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Price per Night</span>
+                    <strong id="summaryPrice">₦30,000</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Number of Nights</span>
+                    <strong id="summaryNights">0</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Number of Rooms</span>
+                    <strong id="summaryRooms">1</strong>
+                </div>
+
+                <div class="summary-row total-row">
+                    <span>Estimated Total</span>
+                    <strong id="summaryTotal">₦0</strong>
+                </div>
+
+                <div class="notice">
+                    These are sample prices for demonstration
+                    purposes. The final amount must be confirmed
+                    by the hotel.
+                </div>
+
+            </section>
+
+            <section class="card">
+
+                <h2>Booking Information</h2>
+
+                <p style="font-size:14px;color:#687586;">
+                    Your reservation request will receive a
+                    reference number. Keep it for your records.
+                    A booking is not confirmed until the hotel
+                    verifies availability and confirms the
+                    reservation.
+                </p>
+
+            </section>
+
+        </aside>
+
+    </div>
+
+</main>
+
+<footer>
+    <div class="container">
+        GrandStay Hotel &copy; 2026. All rights reserved.
+    </div>
+</footer>
+
+<script>
+(function () {
+
+    "use strict";
+
+    // =====================================
+    // 1. SUPABASE DATABASE CONNECTION
+    // =====================================
+
+    const SUPABASE_URL =
+        "https://vwwipenixaczhkuenlbt.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_25wBVaMAnWJbF_MBy4Xzhw_xso0fNDg";
+
+
+    // =====================================
+    // 2. GET HTML ELEMENTS
+    // =====================================
+
+    const form = document.getElementById("bookingForm");
+
+    const roomType = document.getElementById("roomType");
+
+    const roomsInput = document.getElementById("rooms");
+
+    const checkIn = document.getElementById("checkIn");
+
+    const checkOut = document.getElementById("checkOut");
+
+    const message = document.getElementById("message");
+
+    const submitButton =
+        document.getElementById("submitButton");
+
+    const roomAmenities =
+        document.getElementById("roomAmenities");
+
+
+    // =====================================
+    // 3. ROOM PRICES
+    // =====================================
+
+    const ROOM_PRICES = Object.freeze({
+
+        Standard: 30000,
+
+        Deluxe: 50000,
+
+        Suite: 85000
+
+    });
+
+
+    // =====================================
+    // 4. ROOM AMENITIES
+    // =====================================
+
+    const ROOM_AMENITIES = {
+
+        Standard: [
+            "✓ Free Wi-Fi",
+            "✓ Air Conditioning"
+        ],
+
+        Deluxe: [
+            "✓ Free Wi-Fi",
+            "✓ Air Conditioning",
+            "✓ Restaurant Access"
+        ],
+
+        Suite: [
+            "✓ Free Wi-Fi",
+            "✓ Air Conditioning",
+            "✓ Restaurant Access",
+            "✓ Gym Access",
+            "✓ Spa Access",
+            "✓ Sauna Access"
+        ]
+
+    };
+
+
+    function updateRoomAmenities() {
+
+        const selectedRoom = roomType.value;
+
+        const amenities =
+            ROOM_AMENITIES[selectedRoom];
+
+        const heading = document.createElement("p");
+
+        heading.textContent =
+            selectedRoom + " Room Facilities";
+
+        heading.style.cssText =
+            "font-weight:bold;color:#122b40;margin-bottom:8px;";
+
+        roomAmenities.replaceChildren(heading);
+
+        amenities.forEach(function (amenity) {
+
+            const item = document.createElement("p");
+
+            item.textContent = amenity;
+
+            roomAmenities.appendChild(item);
+
+        });
+
+    }
+
+
+    // =====================================
+    // 5. CURRENCY FORMAT
+    // =====================================
+
+    function money(amount) {
+
+        return "₦" + amount.toLocaleString("en-NG");
+
+    }
+
+
+    // =====================================
+    // 6. DATE FUNCTIONS
+    // =====================================
+
+    function localDateString(date) {
+
+        const year = date.getFullYear();
+
+        const month = String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+        const day = String(
+            date.getDate()
+        ).padStart(2, "0");
+
+        return year + "-" + month + "-" + day;
+
+    }
+
+
+    const today = localDateString(new Date());
+
+    checkIn.min = today;
+
+    checkOut.min = today;
+
+
+    function getNights() {
+
+        if (!checkIn.value || !checkOut.value) {
+
+            return 0;
+
+        }
+
+        const start = new Date(
+            checkIn.value + "T00:00:00"
+        );
+
+        const end = new Date(
+            checkOut.value + "T00:00:00"
+        );
+
+        return Math.round(
+            (end - start) / 86400000
+        );
+
+    }
+
+
+    // =====================================
+    // 7. UPDATE RESERVATION SUMMARY
+    // =====================================
+
+    function updateSummary() {
+
+        const type = roomType.value;
+
+        const price = ROOM_PRICES[type];
+
+        const nights = Math.max(0, getNights());
+
+        const roomCount =
+            Number(roomsInput.value) || 1;
+
+        const total =
+            nights * price * roomCount;
+
+
+        document.getElementById(
+            "summaryRoom"
+        ).textContent = type + " Room";
+
+
+        document.getElementById(
+            "summaryPrice"
+        ).textContent = money(price);
+
+
+        document.getElementById(
+            "summaryNights"
+        ).textContent = nights;
+
+
+        document.getElementById(
+            "summaryRooms"
+        ).textContent = roomCount;
+
+
+        document.getElementById(
+            "summaryTotal"
+        ).textContent = money(total);
+
+    }
+
+
+    // =====================================
+    // 8. DISPLAY MESSAGES
+    // =====================================
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className = "message " + type;
+
+        message.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "center"
+
+        });
+
+    }
+
+
+    // =====================================
+    // 9. EVENT LISTENERS
+    // =====================================
+
+    roomType.addEventListener(
+        "change",
+        function () {
+
+            updateRoomAmenities();
+
+            updateSummary();
+
+        }
+    );
+
+
+    roomsInput.addEventListener(
+        "change",
+        updateSummary
+    );
+
+
+    checkIn.addEventListener(
+        "change",
+        function () {
+
+            checkOut.min = checkIn.value || today;
+
+            if (
+                checkOut.value &&
+                checkOut.value <= checkIn.value
+            ) {
+
+                checkOut.value = "";
+
+            }
+
+            updateSummary();
+
+        }
+    );
+
+
+    checkOut.addEventListener(
+        "change",
+        updateSummary
+    );
+
+
+    // =====================================
+    // 10. INITIAL PAGE DISPLAY
+    // =====================================
+
+    updateRoomAmenities();
+
+    updateSummary();
+
+
+    // =====================================
+    // 11. SUBMIT RESERVATION
+    // =====================================
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            if (!form.reportValidity()) {
+
+                return;
+
+            }
+
+
+            // Validate dates
+
+            const nights = getNights();
+
+            if (
+                nights < 1 ||
+                checkIn.value < today ||
+                checkOut.value <= checkIn.value
+            ) {
+
+                showMessage(
+                    "Please select valid check-in and check-out dates.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            // Validate database configuration
+
+            if (
+                !SUPABASE_URL.startsWith("https://") ||
+                SUPABASE_KEY.includes("PASTE_YOUR")
+            ) {
+
+                showMessage(
+                    "Database connection is not configured correctly.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            // Collect booking information
+
+            const type = roomType.value;
+
+            const roomCount =
+                Number(roomsInput.value);
+
+            const price = ROOM_PRICES[type];
+
+            const total =
+                price * nights * roomCount;
+
+
+            const booking = {
+
+                reference:
+                    "GS-" +
+                    Date.now().toString().slice(-8),
+
+                fullName:
+                    document.getElementById(
+                        "fullName"
+                    ).value.trim(),
+
+                email:
+                    document.getElementById(
+                        "email"
+                    ).value.trim(),
+
+                phone:
+                    document.getElementById(
+                        "phone"
+                    ).value.trim(),
+
+                guests:
+                    Number(
+                        document.getElementById(
+                            "guests"
+                        ).value
+                    ),
+
+                roomType: type,
+
+                rooms: roomCount,
+
+                checkIn: checkIn.value,
+
+                checkOut: checkOut.value,
+
+                nights: nights,
+
+                price: price,
+
+                estimatedTotal: total,
+
+                paymentMethod:
+                    document.getElementById(
+                        "paymentMethod"
+                    ).value,
+
+                specialRequests:
+                    document.getElementById(
+                        "requests"
+                    ).value.trim()
+
+            };
+
+
+            // Prevent multiple submissions
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "Submitting Reservation...";
+
+
+            try {
+
+                // Send reservation to Supabase
+
+                const response = await fetch(
+
+                    SUPABASE_URL +
+                    "/rest/v1/reservations",
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "apikey":
+                                SUPABASE_KEY,
+
+                            "Authorization":
+                                "Bearer " + SUPABASE_KEY,
+
+                            "Prefer":
+                                "return=minimal"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            booking_reference:
+                                booking.reference,
+
+                            guest_name:
+                                booking.fullName,
+
+                            guest_email:
+                                booking.email,
+
+                            guest_phone:
+                                booking.phone,
+
+                            number_of_guests:
+                                booking.guests,
+
+                            room_type:
+                                booking.roomType,
+
+                            number_of_rooms:
+                                booking.rooms,
+
+                            check_in:
+                                booking.checkIn,
+
+                            check_out:
+                                booking.checkOut,
+
+                            number_of_nights:
+                                booking.nights,
+
+                            price_per_night:
+                                booking.price,
+
+                            estimated_total:
+                                booking.estimatedTotal,
+
+                            payment_method:
+                                booking.paymentMethod,
+
+                            special_requests:
+                                booking.specialRequests,
+
+                            status: "Pending"
+
+                        })
+
+                    }
+
+                );
+
+
+                // Read server response
+
+                const responseText =
+                    await response.text();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        "Supabase error (" +
+                        response.status +
+                        "): " +
+                        responseText
+
+                    );
+
+                }
+
+
+                // Successful reservation
+
+                showMessage(
+
+                    "Reservation submitted successfully! " +
+                    "Your reference number is " +
+                    booking.reference +
+                    ". Your booking is awaiting hotel confirmation. " +
+                    "No payment has been taken.",
+
+                    "success"
+
+                );
+
+
+                // Reset form
+
+                form.reset();
+
+                checkIn.min = today;
+
+                checkOut.min = today;
+
+                updateRoomAmenities();
+
+                updateSummary();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Reservation submission error:",
+                    error
+                );
+
+
+                showMessage(
+
+                    "Reservation failed: " +
+                    error.message,
+
+                    "error"
+
+                );
+
+
+            } finally {
+
+                // Restore submit button
+
+                submitButton.disabled = false;
+
+                submitButton.textContent =
+                    "Submit Reservation Request";
+
+            }
+
+        }
+
+    );
+
+
+})();
+</script>
+
+</body>
+</html>
