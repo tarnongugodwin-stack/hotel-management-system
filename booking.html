@@ -542,28 +542,51 @@ const ROOM_PRICES = Object.freeze({
     }
 
     function updateSummary() {
-        const type = roomType.value;
-        const price = ROOM_PRICES[type] || ROOM_PRICES.Standard;
-        const nights = getNights();
-        const roomCount = Number(roomsInput.value) || 1;
-        const total = Math.max(0, nights) * price * roomCount;
+    const type = roomType.value;
+    const price = ROOM_PRICES[type] || 30000;
 
-        document.getElementById("summaryRoom").textContent =
-            type + " Room";
+    let nights = getNights();
 
-        document.getElementById("summaryPrice").textContent =
-            money(price);
-
-        document.getElementById("summaryNights").textContent =
-            Math.max(0, nights);
-
-        document.getElementById("summaryRooms").textContent =
-            roomCount;
-
-        document.getElementById("summaryTotal").textContent =
-            money(total);
+    if (nights < 0 || !Number.isFinite(nights)) {
+        nights = 0;
     }
 
+    const roomCount = Number(roomsInput.value) || 1;
+
+    const total = nights * price * roomCount;
+
+    document.getElementById("summaryRoom").textContent =
+        type + " Room";
+
+    document.getElementById("summaryPrice").textContent =
+        money(price);
+
+    document.getElementById("summaryNights").textContent =
+        nights;
+
+    document.getElementById("summaryRooms").textContent =
+        roomCount;
+
+    document.getElementById("summaryTotal").textContent =
+        money(total);
+}
+roomType.addEventListener("change", updateSummary);
+
+roomsInput.addEventListener("change", updateSummary);
+
+checkIn.addEventListener("change", function () {
+    checkOut.min = checkIn.value || today;
+
+    if (checkOut.value && checkOut.value <= checkIn.value) {
+        checkOut.value = "";
+    }
+
+    updateSummary();
+});
+
+checkOut.addEventListener("change", updateSummary);
+
+updateSummary();
     roomType.addEventListener("change", updateSummary);
     roomsInput.addEventListener("change", updateSummary);
 
