@@ -1,323 +1,505 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Administrator Login - GrandStay Hotel</title><style>
+
+<title>Administrator Login | GrandStay Hotel</title>
+
+<style>
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: #edf2f7;
-  color: #263449;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #edf2f7;
+    color: #263449;
 }
 
 .login-box {
-  width: 100%;
-  max-width: 400px;
-  padding: 30px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
 }
 
 .logo {
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #17375e;
-  color: white;
-  font-size: 32px;
-  font-weight: bold;
-  border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #17375e;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    border-radius: 50%;
 }
 
 h1 {
-  margin: 0;
-  text-align: center;
-  font-size: 25px;
-  color: #17375e;
+    margin: 0;
+    text-align: center;
+    font-size: 25px;
+    color: #17375e;
 }
 
 .subtitle {
-  text-align: center;
-  color: #697586;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 10px 0 25px;
+    text-align: center;
+    color: #697586;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 10px 0 25px;
 }
 
 label {
-  display: block;
-  margin-bottom: 7px;
-  font-weight: bold;
-  font-size: 14px;
+    display: block;
+    margin-bottom: 7px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 input {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #ccd3dc;
-  border-radius: 7px;
-  font-size: 15px;
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccd3dc;
+    border-radius: 7px;
+    font-size: 15px;
 }
 
 input:focus {
-  outline: 2px solid #b8d4f5;
-  border-color: #1d5ca8;
+    outline: 2px solid #b8d4f5;
+    border-color: #1d5ca8;
 }
 
 .form-group {
-  margin-bottom: 18px;
+    margin-bottom: 18px;
 }
 
 .password-row {
-  display: flex;
-  gap: 6px;
+    display: flex;
+    gap: 6px;
 }
 
 .password-row input {
-  flex: 1;
-  min-width: 0;
+    flex: 1;
+    min-width: 0;
 }
 
 button {
-  padding: 12px;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .show-btn {
-  background: #e7edf5;
-  color: #243047;
+    background: #e7edf5;
+    color: #243047;
 }
 
 .login-btn {
-  width: 100%;
-  background: #1d5ca8;
-  color: white;
-  font-size: 16px;
-  margin-top: 5px;
+    width: 100%;
+    background: #1d5ca8;
+    color: white;
+    font-size: 16px;
+    margin-top: 5px;
 }
 
 .login-btn:disabled {
-  opacity: 0.6;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .message {
-  display: none;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 7px;
-  font-size: 14px;
-  line-height: 1.5;
+    display: none;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .error {
-  display: block;
-  background: #fce2e4;
-  color: #a61b29;
+    display: block;
+    background: #fce2e4;
+    color: #a61b29;
 }
 
 .success {
-  display: block;
-  background: #dff5e5;
-  color: #176b35;
+    display: block;
+    background: #dff5e5;
+    color: #176b35;
 }
 
 .back-link {
-  display: block;
-  margin-top: 22px;
-  text-align: center;
-  text-decoration: none;
-  color: #1d5ca8;
-  font-size: 14px;
-}
-
-.notice {
-  margin-top: 20px;
-  padding: 12px;
-  background: #fff0cc;
-  color: #775300;
-  border-radius: 7px;
-  font-size: 12px;
-  line-height: 1.5;
+    display: block;
+    margin-top: 22px;
+    text-align: center;
+    text-decoration: none;
+    color: #1d5ca8;
+    font-size: 14px;
 }
 
 footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 12px;
-  color: #8993a3;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #8993a3;
 }
-</style></head><body><div class="login-box">  <div class="logo">G</div>  <h1>GrandStay Hotel</h1>  <p class="subtitle">
-    Administrator Login<br>
-    Sign in to access the management dashboard.
-  </p>  <div id="message" class="message" role="alert"></div>  <form id="loginForm"><div class="form-group">
-  <label for="username">Username</label>
-  <input
-    type="text"
-    id="username"
-    placeholder="Enter username"
-    autocomplete="username"
-    required>
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">G</div>
+
+    <h1>GrandStay Hotel</h1>
+
+    <p class="subtitle">
+        Administrator Login<br>
+        Sign in to access the management dashboard.
+    </p>
+
+    <div id="message" class="message" role="alert"></div>
+
+    <form id="loginForm">
+
+        <div class="form-group">
+
+            <label for="email">Administrator Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter administrator email"
+                autocomplete="username"
+                required>
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="password">Password</label>
+
+            <div class="password-row">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required>
+
+                <button
+                    type="button"
+                    class="show-btn"
+                    id="showPassword">
+
+                    Show
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <button
+            type="submit"
+            class="login-btn"
+            id="loginButton">
+
+            Sign In
+
+        </button>
+
+    </form>
+
+    <a href="index.html" class="back-link">
+        Return to Hotel Homepage
+    </a>
+
+    <footer>
+        GrandStay Hotel Management System
+    </footer>
+
 </div>
 
-<div class="form-group">
-  <label for="password">Password</label>
+<!-- SUPABASE JAVASCRIPT LIBRARY -->
 
-  <div class="password-row">
-    <input
-      type="password"
-      id="password"
-      placeholder="Enter password"
-      autocomplete="current-password"
-      required>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <button
-      type="button"
-      class="show-btn"
-      id="showPassword">
-      Show
-    </button>
-  </div>
-</div>
+<script>
 
-<button type="submit" class="login-btn" id="loginButton">
-  Sign In
-</button>
-
-  </form>  <a href="index.html" class="back-link">
-    Return to Hotel Dashboard
-  </a>  <div class="notice">
-    <strong>Important:</strong> This is a demonstration login.
-    GitHub Pages cannot securely authenticate administrators
-    by itself. Do not use this prototype to protect real hotel
-    records or sensitive information.
-  </div>  <footer>
-    GrandStay Hotel Management System
-  </footer></div><script>
 (function () {
-  "use strict";
 
-  const SESSION_KEY = "grandstayAdminSession";
-  const SESSION_TIME = 30 * 60 * 1000;
+    "use strict";
 
-  const USERNAME = "admin";
-  const PASSWORD = "GrandStay2026!";
 
-  const form = document.getElementById("loginForm");
-  const username = document.getElementById("username");
-  const password = document.getElementById("password");
-  const message = document.getElementById("message");
-  const loginButton = document.getElementById("loginButton");
-  const showPassword = document.getElementById("showPassword");
+    // =================================
+    // SUPABASE CONNECTION
+    // =================================
 
-  function showMessage(text, type) {
-    message.textContent = text;
-    message.className = "message " + type;
-  }
+    const SUPABASE_URL =
+        "https://vwwipenixaczhkuenlbt.supabase.co";
 
-  function getSession() {
-    try {
-      const data = JSON.parse(
-        sessionStorage.getItem(SESSION_KEY) || "null"
-      );
+    const SUPABASE_KEY =
+        "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
-      if (!data || !Number.isFinite(data.expiresAt)) {
-        return null;
-      }
 
-      if (data.expiresAt <= Date.now()) {
-        sessionStorage.removeItem(SESSION_KEY);
-        return null;
-      }
+    // =================================
+    // INITIALIZE SUPABASE
+    // =================================
 
-      return data;
-    } catch (error) {
-      sessionStorage.removeItem(SESSION_KEY);
-      return null;
+    const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+    // =================================
+    // HTML ELEMENTS
+    // =================================
+
+    const form =
+        document.getElementById("loginForm");
+
+    const email =
+        document.getElementById("email");
+
+    const password =
+        document.getElementById("password");
+
+    const message =
+        document.getElementById("message");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const showPassword =
+        document.getElementById("showPassword");
+
+
+    // =================================
+    // DISPLAY MESSAGE
+    // =================================
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className =
+            "message " + type;
+
     }
-  }
 
-  showPassword.addEventListener("click", function () {
-    const hidden = password.type === "password";
 
-    password.type = hidden ? "text" : "password";
-    showPassword.textContent = hidden ? "Hide" : "Show";
-  });
+    // =================================
+    // SHOW OR HIDE PASSWORD
+    // =================================
 
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
+    showPassword.addEventListener(
+        "click",
+        function () {
 
-    const enteredUsername = username.value.trim();
-    const enteredPassword = password.value;
+            const hidden =
+                password.type === "password";
 
-    if (
-      enteredUsername === USERNAME &&
-      enteredPassword === PASSWORD
-    ) {
-      const session = {
-        username: USERNAME,
-        expiresAt: Date.now() + SESSION_TIME
-      };
+            password.type =
+                hidden ? "text" : "password";
 
-      try {
-        sessionStorage.setItem(
-          SESSION_KEY,
-          JSON.stringify(session)
-        );
+            showPassword.textContent =
+                hidden ? "Hide" : "Show";
 
-        showMessage(
-          "Login successful. Opening dashboard...",
-          "success"
-        );
+        }
+    );
 
-        loginButton.disabled = true;
 
-        setTimeout(function () {
-          window.location.href = "admin-dashboard.html";
-        }, 700);
+    // =================================
+    // CHECK EXISTING LOGIN SESSION
+    // =================================
 
-      } catch (error) {
-        showMessage(
-          "Unable to create a session. Please enable browser storage.",
-          "error"
-        );
+    async function checkExistingSession() {
 
-        loginButton.disabled = false;
-      }
+        try {
 
-    } else {
-      showMessage(
-        "Incorrect username or password. Please try again.",
-        "error"
-      );
+            const {
+                data,
+                error
+            } = await supabase.auth.getUser();
 
-      password.value = "";
-      password.focus();
+            if (error) {
+                return;
+            }
+
+            if (data.user) {
+
+                window.location.replace(
+                    "admin-dashboard.html"
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Session check failed:",
+                error
+            );
+
+        }
+
     }
-  });
 
-const existingSession = getSession();
 
-if (existingSession) {
-  window.location.replace("./admin-dashboard.html");
-}
+    // =================================
+    // ADMINISTRATOR LOGIN
+    // =================================
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            const enteredEmail =
+                email.value.trim();
+
+            const enteredPassword =
+                password.value;
+
+            if (
+                !SUPABASE_KEY ||
+                SUPABASE_KEY.includes("PASTE_YOUR")
+            ) {
+
+                showMessage(
+                    "Supabase publishable key is missing.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "Authenticating...";
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await supabase.auth.signInWithPassword({
+
+                    email: enteredEmail,
+
+                    password: enteredPassword
+
+                });
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                if (!data.user) {
+
+                    throw new Error(
+                        "Unable to verify administrator account."
+                    );
+
+                }
+
+
+                // Verify this is the authorized administrator.
+
+                const ADMIN_USER_ID =
+                    "PASTE_ADMIN_USER_ID_HERE";
+
+                if (
+                    data.user.id !== ADMIN_USER_ID
+                ) {
+
+                    await supabase.auth.signOut();
+
+                    throw new Error(
+                        "This account is not authorized to access the administrator dashboard."
+                    );
+
+                }
+
+
+                showMessage(
+                    "Login successful. Opening dashboard...",
+                    "success"
+                );
+
+                loginButton.textContent =
+                    "Login Successful";
+
+
+                setTimeout(function () {
+
+                    window.location.href =
+                        "admin-dashboard.html";
+
+                }, 700);
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+                showMessage(
+                    error.message ||
+                    "Login failed. Please try again.",
+                    "error"
+                );
+
+                loginButton.disabled = false;
+
+                loginButton.textContent =
+                    "Sign In";
+
+            }
+
+        }
+    );
+
+
+    // =================================
+    // START LOGIN PAGE
+    // =================================
+
+    checkExistingSession();
+
 
 })();
-</script></body>
+
+</script>
+
+</body>
 </html>
