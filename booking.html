@@ -687,7 +687,7 @@ if (!response.ok) {
         responseText
     );
 }
-
+console.log("SUPABASE INSERT SUCCESSFUL");
             showMessage(
                 "Reservation submitted successfully! Reference: " +
                 booking.reference +
@@ -702,6 +702,7 @@ if (!response.ok) {
 
         } catch (error) {
             console.error("Reservation error:", error);
+                    console.log("SUPABASE INSERT FAILED");
 
             showMessage(
     "Reservation failed: " + error.message,
