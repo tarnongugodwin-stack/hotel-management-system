@@ -677,11 +677,16 @@ const ROOM_PRICES = Object.freeze({
                 }
             );
 
-            if (!response.ok) {
-                throw new Error(
-                    "Database request failed: " + response.status
-                );
-            }
+            const responseText = await response.text();
+
+if (!response.ok) {
+    throw new Error(
+        "Supabase error (" +
+        response.status +
+        "): " +
+        responseText
+    );
+}
 
             showMessage(
                 "Reservation submitted successfully! Reference: " +
@@ -699,9 +704,9 @@ const ROOM_PRICES = Object.freeze({
             console.error("Reservation error:", error);
 
             showMessage(
-                "We could not submit your reservation online. Please check your internet connection and try again.",
-                "error"
-            );
+    "Reservation failed: " + error.message,
+    "error"
+);
         }
 
     updateSummary();
